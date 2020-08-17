@@ -1,0 +1,21 @@
+{
+  "name": "manyitems",
+  "version": "1.0.0",
+  "description": "A simple and intuitive item-creator",
+  "author": "WubzyGD#8766",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rpg",
+    "items",
+    "generator"
+  ],
+  "license": "ISC",
+  "displayName": "ManyItems",
+  "dependencies": {
+    "typescript": "^3.9.7"
+  }
+}
