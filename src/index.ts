@@ -1,1 +1,1 @@
-export {Weapon} from './main';
+export {Weapon} from './weapon';
