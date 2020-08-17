@@ -10,13 +10,12 @@ export class Weapon {
 
     constructor (name: string, metaInfo?: MetaInfo | null, customDamage?: CustomDamage) {
         this.name = name;
-        if (Weapon.checkParam(customDamage)) {this.customDamage = Weapon.verifyCustomDamage(customDamage);};
-        if (Weapon.checkParam(metaInfo)) {Weapon.verifyMetaInfo(metaInfo, this);};
+        if (Weapon.checkParam(customDamage)) {this.customDamage = Weapon.verifyCustomDamage(customDamage);}
+        if (Weapon.checkParam(metaInfo)) {Weapon.verifyMetaInfo(metaInfo, this);}
     };
 
     public addCustomDamage(damage: number, statuses: Effects): Weapon {
-        let tempCD: object = {damage: damage, statuses: statuses};
-        this.customDamage = tempCD;
+        this.customDamage = {damage: damage, statuses: statuses};
         return this;
     };
 
@@ -42,16 +41,16 @@ export class Weapon {
     private static verifyCustomDamage(cd: object): CustomDamage {
         function checkObj(obj: object): obj is CustomDamage {
             return "damage" in obj;
-        };
+        }
 
         if (checkObj(cd)) {return cd;}
-        else {throw new SyntaxError("Invalid Custom Damage passed into constructor for Weapon.");};
+        else {throw new SyntaxError("Invalid Custom Damage passed into constructor for Weapon.");}
     };
 
     private static verifyMetaInfo(mi: object, weapon: Weapon): MetaInfo {
         function checkObj(obj: object): obj is MetaInfo {
             return "author" in obj;
-        };
+        }
 
         if (checkObj(mi)) {
             weapon.author = mi.author;
@@ -60,25 +59,25 @@ export class Weapon {
             weapon.material = mi.material;
 
             return mi;
-        } else {throw new SyntaxError("Invalid Meta Info passed into constructor for Weapon.");};
+        } else {throw new SyntaxError("Invalid Meta Info passed into constructor for Weapon.");}
     };
 
     private static checkParam(param: object | null) {return typeof param != "undefined" && param};
-};
+}
 
 type Effects = string | Array<string> | null;
 
 interface CustomDamage {
     damage: number,
     statuses: Effects
-};
+}
 
 interface MetaInfo {
     description: string,
     rarity: string,
     material: string,
     author: string
-};
+}
 
 //interface Lore {};
 
@@ -88,3 +87,8 @@ interface MetaInfo {
 
 
 
+let sword = new Weapon("Sword");
+sword.setAuthor("WubzyGD");
+sword.setDescription("A really cool sword.");
+sword.addMetaInfo(sword.description, "Rare", "Iron", sword.author);
+sword.addCustomDamage(10, "Slicing");
