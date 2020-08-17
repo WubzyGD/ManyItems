@@ -1,3 +1,5 @@
+import {RarityValkyrie} from './util';
+
 export class Weapon {
     name: string;
 
@@ -90,5 +92,5 @@ interface MetaInfo {
 let sword = new Weapon("Sword");
 sword.setAuthor("WubzyGD");
 sword.setDescription("A really cool sword.");
-sword.addMetaInfo(sword.description, "Rare", "Iron", sword.author);
+sword.addMetaInfo(sword.description, RarityValkyrie.R2, "Iron", sword.author);
 sword.addCustomDamage(10, "Slicing");
