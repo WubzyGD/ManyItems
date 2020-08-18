@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Weapon = void 0;
 const attack_1 = require("./attack");
+const mod_1 = require("./mod");
 class Weapon {
     constructor(name, mainAttack, attackParams, metaInfo) {
         this.name = name;
@@ -69,12 +70,34 @@ class Weapon {
     ;
 }
 exports.Weapon = Weapon;
-let sword = new Weapon("Sword", new attack_1.Attack("Stab"))
-    .setMeta({})
+let sword = new Weapon("Sword", new attack_1.Attack("Stab", new mod_1.Mod("Example1", {
+    chance: 40, mode: "reroll_merge",
+    bonusChance: {
+        force: 5,
+        random: { min: 5, max: 10 }
+    }, slugChance: {
+        force: 5,
+        random: { min: 5, max: 10 }
+    }
+}, { damageAdd: 10, multiplier: 1.5, multiplierAC: 10 }, "default"))).setMeta({})
     .setAttackParams({
     canAttack: true, durability: true, maxRange: 100, durabilityMode: "heap",
     statuses: { holder: null, victim: ["sliced"] },
     custom: { aCustomProperty: "Some Data!" }
 })
     .editStats({});
-console.log(sword, sword.metaInfo);
+let myw = new Weapon("Euclidator", new attack_1.Attack("Slash", new mod_1.Mod("Dark Damage", { always: true }, {
+    damageAdd: {
+        force: 3, random: {
+            min: 2, max: 6
+        }
+    }, statuses: {
+        victim: "-5HP/2 Turns"
+    }
+}, "disable")), {
+    canAttack: true,
+    durability: true,
+    maxRange: 5,
+});
+console.log(sword);
+console.log(myw);

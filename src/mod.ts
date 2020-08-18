@@ -56,7 +56,7 @@ interface ActivateOn {
 interface MainEffects {
     damageAdd: Random,
     multiplier?: Random,
-    multiplerAC?: Random,
+    multiplierAC?: Random,
     statuses?: Effects | Effects_Obj,
     statusGrantChance?: Random
 }
@@ -73,6 +73,6 @@ let ex1 = new Mod("Example1", {
     }, slugChance: {
         force: 5,
         random: {min: 5, max: 10}
-    }}, {damageAdd: 10, multiplier: 1.5, multiplerAC: 10}, "default");
+    }}, {damageAdd: 10, multiplier: 1.5, multiplierAC: 10}, "default");
 
 console.log(ex1);

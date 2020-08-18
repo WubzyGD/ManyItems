@@ -1,6 +1,6 @@
 {
   "name": "manyitems",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "A simple and intuitive item-creator",
   "author": "WubzyGD#8766",
   "main": "dist/index.js",

@@ -2,5 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var weapon_1 = require("./weapon");
 Object.defineProperty(exports, "Weapon", { enumerable: true, get: function () { return weapon_1.Weapon; } });
+var attack_1 = require("./attack");
+Object.defineProperty(exports, "Attack", { enumerable: true, get: function () { return attack_1.Attack; } });
+var mod_1 = require("./mod");
+Object.defineProperty(exports, "Mod", { enumerable: true, get: function () { return mod_1.Mod; } });
 var util_1 = require("./util");
 Object.defineProperty(exports, "RarityValkyrie", { enumerable: true, get: function () { return util_1.RarityValkyrie; } });

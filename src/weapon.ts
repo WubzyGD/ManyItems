@@ -104,7 +104,7 @@ let sword = new Weapon("Sword",
             }, slugChance: {
                 force: 5,
                 random: {min: 5, max: 10}
-            }}, {damageAdd: 10, multiplier: 1.5, multiplerAC: 10},
+            }}, {damageAdd: 10, multiplier: 1.5, multiplierAC: 10},
             "default"
         )
     )
