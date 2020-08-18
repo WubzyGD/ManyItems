@@ -1,0 +1,17 @@
+Index: package-lock.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n  \"name\": \"manyitems\",\r\n  \"version\": \"1.0.3\",\r\n  \"lockfileVersion\": 1,\r\n  \"requires\": true,\r\n  \"dependencies\": {\r\n    \"typescript\": {\r\n      \"version\": \"3.9.7\",\r\n      \"resolved\": \"https://registry.npmjs.org/typescript/-/typescript-3.9.7.tgz\",\r\n      \"integrity\": \"sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw==\"\r\n    }\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- package-lock.json	(revision a94236456146972c1e32a6869d6b659e34edbc28)
++++ package-lock.json	(date 1597710729505)
+@@ -1,6 +1,6 @@
+ {
+   "name": "manyitems",
+-  "version": "1.0.3",
++  "version": "1.0.2",
+   "lockfileVersion": 1,
+   "requires": true,
+   "dependencies": {
