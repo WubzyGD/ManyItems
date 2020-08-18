@@ -65,7 +65,7 @@ interface MainEffects {
 
 
 
-let ex1 = new Mod("Example1", {
+/*let ex1 = new Mod("Example1", {
     chance: 40, mode: "reroll_merge", 
     bonusChance: {
         force: 5,
@@ -75,4 +75,4 @@ let ex1 = new Mod("Example1", {
         random: {min: 5, max: 10}
     }}, {damageAdd: 10, multiplier: 1.5, multiplierAC: 10}, "default");
 
-console.log(ex1);
+console.log(ex1);*/

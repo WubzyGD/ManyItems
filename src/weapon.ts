@@ -6,6 +6,7 @@ export class Weapon {
 
     mainAttack: Attack;
     attackParams: object;
+    attacks: Array<Attack>;
 
     stats: object;
 
@@ -13,16 +14,21 @@ export class Weapon {
 
 
 
-    constructor (name: string, mainAttack?: Attack, attackParams?: AttackParams, metaInfo?: MetaInfo) {
+    constructor (name: string, mainAttack?: Attack | null, attackParams?: AttackParams, attacks?: Array<Attack> | Attack | null, metaInfo?: MetaInfo, stats?: Stats) {
         this.name = name;
-        if (mainAttack) {this.mainAttack = mainAttack;} else {this.mainAttack = null;}
+        if (mainAttack) {this.setMainAttack(mainAttack);} else {this.mainAttack = null;}
         if (attackParams) {this.attackParams = Weapon.verifyAttackParams(attackParams, this, true);} else {this.attackParams = null;}
+
+        this.verifyAttacks(mainAttack, attacks);
+
         if (metaInfo) {this.meta = Weapon.verifyMetaInfo(metaInfo, this, true);} else {this.meta = null;}
     };
 
 
 
-    public setMainAttack(attack: Attack): Weapon {
+    public setMainAttack(attack: Attack | null): Weapon {
+        if (!(attack instanceof Attack) && attack !== null) {console.log(attack); throw new SyntaxError("Weapon param 'mainAttack' must be an instance of class 'Attack'");}
+        this.verifyAttacks(attack, this.attacks);
         this.mainAttack = attack;
         return this;
     };
@@ -39,6 +45,18 @@ export class Weapon {
         return this;
     };
 
+    public setAttacks(attacks: Array<Attack> | Attack | null): Weapon {
+        this.attacks = this.verifyAttacks(this.mainAttack, attacks);
+        return this;
+    };
+
+
+
+    public addAttack(attack: Attack): Weapon {
+        this.verifyAttacks(this.mainAttack, this.attacks).push(attack);
+        return this;
+    };
+
 
 
     public editStats(newStats: Stats, clearOld?: boolean): Weapon {
@@ -49,7 +67,7 @@ export class Weapon {
 
     private static verifyAttackParams(params: object, w: Weapon, full?: boolean): object {
         if (full) {
-            function verify (obj: object): obj is AttackParams {return 'canAttack' in obj}
+            function verify (obj: object): obj is AttackParams {return 'canAttack' in obj;}
             if (verify(params)) {w.attackParams = params;} else {throw new SyntaxError("Invalid 'attackParams' given.");}
         }
 
@@ -57,12 +75,32 @@ export class Weapon {
     };
 
     private static verifyMetaInfo(params: object, w: Weapon, full?: boolean): object {
+        if (full) {
+            function verify (obj: object): obj is MetaInfo {return 'author' in obj || 'rarity' in obj;}
+            if (verify(params)) {w.meta = params;} else {throw new SyntaxError("Invalid 'metaInfo' given.");}
+        }
+
         return params;
+    };
+
+    private verifyAttacks(mainAttack: Attack | null, attacks: Array<Attack> | Attack | null): Array<Attack> {
+        if (mainAttack === null && attacks) {throw new SyntaxError("Attack(s) given in Weapon constructor or setAttacks(), but no Main Attack is set. Make sure you designate a main attack in constructor or use setMainAttack().");}
+        if (attacks && mainAttack) {
+            if (Array.isArray(attacks)) {if (!attacks.includes(mainAttack)) {
+                attacks.push(mainAttack);
+                this.attacks = attacks;
+            }} else {this.attacks = [mainAttack, attacks];}
+        } else if (!attacks && mainAttack) {this.attacks = [mainAttack];}
+        else {this.attackParams = {canAttack: false};}
+        if (attacks instanceof Attack && !Array.isArray(attacks)) {this.attacks = [attacks];}
+
+        return this.attacks;
     };
 
 
 
     get metaInfo(): object {return this.meta};
+
 }
 
 type Effects = string | Array<string> | null;
@@ -87,58 +125,19 @@ interface AttackParams {
     custom?: object
 }
 
-interface MetaInfo {}
+interface MetaInfo {
+    author?: string,
+    rarity?: string
+}
 
 interface Stats {
     isBroken?: true,
     custom?: object
 }
 
-let sword = new Weapon("Sword", 
-    new Attack("Stab", 
-        new Mod("Example1", {
-            chance: 40, mode: "reroll_merge", 
-            bonusChance: {
-                force: 5,
-                random: {min: 5, max: 10}
-            }, slugChance: {
-                force: 5,
-                random: {min: 5, max: 10}
-            }}, {damageAdd: 10, multiplier: 1.5, multiplierAC: 10},
-            "default"
-        )
-    )
-).setMeta({})
-.setAttackParams({
-    canAttack: true, durability: true, maxRange: 100, durabilityMode: "heap",
-    statuses: {holder: null, victim: ["sliced"]},
-    custom: {aCustomProperty: "Some Data!"}
-})
-.editStats({});
+/*let sword = new Weapon("Sword")
+.setMainAttack(new Attack("Stab", null))
+.setAttackParams({canAttack: true, durability: true, maxRange: 20, statuses: "bleeding"})
+.setMeta({author: "WubzyGD", rarity: "Common"});
 
-let myw = new Weapon("Euclidator", 
-    new Attack("Slash", 
-        new Mod("Dark Damage", 
-        {always: true}, {
-            damageAdd: {
-                force: 3, random: {
-                    min: 2, max: 6
-                }
-            }, statuses: {
-                victim: "-5HP/2 Turns"
-            }
-        }, "disable")
-    ), {
-        canAttack: true,
-        durability: true,
-        maxRange: 5,
-    }
-)
-
-console.log(sword);
-console.log(myw);
-
-let swords = JSON.stringify(sword);
-let swordsd = JSON.parse(swords);
-swordsd.__proto__ = Weapon.prototype;
-console.log(swordsd.attackParams, swordsd instanceof Weapon);
+console.log(sword);*/

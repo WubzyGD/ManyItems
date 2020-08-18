@@ -3,16 +3,20 @@ export declare class Weapon {
     name: string;
     mainAttack: Attack;
     attackParams: object;
+    attacks: Array<Attack>;
     stats: object;
     meta: object;
-    constructor(name: string, mainAttack?: Attack, attackParams?: AttackParams, metaInfo?: MetaInfo);
-    setMainAttack(attack: Attack): Weapon;
+    constructor(name: string, mainAttack?: Attack | null, attackParams?: AttackParams, attacks?: Array<Attack> | Attack | null, metaInfo?: MetaInfo, stats?: Stats);
+    setMainAttack(attack: Attack | null): Weapon;
     setMetaInfo(meta: MetaInfo): Weapon;
     setMeta(meta: MetaInfo): Weapon;
     setAttackParams(params: AttackParams): Weapon;
+    setAttacks(attacks: Array<Attack> | Attack | null): Weapon;
+    addAttack(attack: Attack): Weapon;
     editStats(newStats: Stats, clearOld?: boolean): Weapon;
     private static verifyAttackParams;
     private static verifyMetaInfo;
+    private verifyAttacks;
     get metaInfo(): object;
 }
 declare type Effects = string | Array<string> | null;
@@ -33,6 +37,8 @@ interface AttackParams {
     custom?: object;
 }
 interface MetaInfo {
+    author?: string;
+    rarity?: string;
 }
 interface Stats {
     isBroken?: true;
