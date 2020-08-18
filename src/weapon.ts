@@ -1,96 +1,81 @@
-import {RarityValkyrie} from './util';
+import {Attack} from './attack';
 
 export class Weapon {
     name: string;
 
-    author: string;
-    rarity: string;
-    material: string;
-    description: string;
+    mainAttack: Attack;
+    attackParams: object;
 
-    customDamage: object;
+    meta: object;
 
-    constructor (name: string, metaInfo?: MetaInfo | null, customDamage?: CustomDamage) {
+
+
+    constructor (name: string, mainAttack?: Attack, attackParams?: AttackParams, metaInfo?: MetaInfo) {
         this.name = name;
-        if (Weapon.checkParam(customDamage)) {this.customDamage = Weapon.verifyCustomDamage(customDamage);}
-        if (Weapon.checkParam(metaInfo)) {Weapon.verifyMetaInfo(metaInfo, this);}
+        if (mainAttack) {this.mainAttack = mainAttack;} else {this.mainAttack = null;}
+        if (attackParams) {this.attackParams = attackParams;} else {this.attackParams = null;}
     };
 
-    public addCustomDamage(damage: number, statuses: Effects): Weapon {
-        this.customDamage = {damage: damage, statuses: statuses};
+
+
+    public setMainAttack(attack: Attack): Weapon {
+        this.mainAttack = attack;
         return this;
     };
 
-    public addMetaInfo(description: string, rarity: string, material: string, author: string): Weapon {
-        this.author = author;
-        this.description = description;
-        this.rarity = rarity;
-        this.material = material;
+    public setMetaInfo(meta: MetaInfo): Weapon {
+        this.meta = meta;
+        return this;
+    }; public setMeta(meta: MetaInfo): Weapon {
+        return this.setMetaInfo(meta);
+    };
 
+    public setAttackParams(params: AttackParams): Weapon {
+        this.attackParams = params;
         return this;
     };
 
-    public setAuthor(authorName: string): Weapon {
-        this.author = authorName;
-        return this;
-    };
 
-    public setDescription(weaponDescription: string): Weapon {
-        this.description = weaponDescription;
-        return this;
-    };
 
-    private static verifyCustomDamage(cd: object): CustomDamage {
-        function checkObj(obj: object): obj is CustomDamage {
-            return "damage" in obj;
+    private static verifyAttackParams(params: object, w: Weapon, full?: boolean): Weapon {
+        if (full) {
+            function verify (obj: object): obj is AttackParams {return 'canAttack' in obj}
+            if (verify(params)) {w.attackParams = params;} else {throw new SyntaxError("Invalid 'attackParams' given.");}
         }
 
-        if (checkObj(cd)) {return cd;}
-        else {throw new SyntaxError("Invalid Custom Damage passed into constructor for Weapon.");}
+        return w;
     };
 
-    private static verifyMetaInfo(mi: object, weapon: Weapon): MetaInfo {
-        function checkObj(obj: object): obj is MetaInfo {
-            return "author" in obj;
-        }
+    private static verifyMetaInfo(params: object, w: Weapon, full?: boolean) {};
 
-        if (checkObj(mi)) {
-            weapon.author = mi.author;
-            weapon.description = mi.description;
-            weapon.rarity = mi.rarity;
-            weapon.material = mi.material;
 
-            return mi;
-        } else {throw new SyntaxError("Invalid Meta Info passed into constructor for Weapon.");}
-    };
 
-    private static checkParam(param: object | null) {return typeof param != "undefined" && param};
+    get metaInfo(): object {return this.meta};
 }
 
 type Effects = string | Array<string> | null;
 
-interface CustomDamage {
-    damage: number,
-    statuses: Effects
+interface Effects_Obj {
+    victim?: Effects,
+    target?: Effects,
+
+    caster?: Effects,
+    user?: Effects,
+    holder?: Effects,
+
+    all?: Effects
 }
 
-interface MetaInfo {
-    description: string,
-    rarity: string,
-    material: string,
-    author: string
+interface AttackParams {
+    canAttack: boolean,
+    durability?: number,
+    maxRange?: number,
+    statuses?: Effects | Effects_Obj,
+    custom?: object
 }
 
-//interface Lore {};
+interface MetaInfo {}
 
+let sword = new Weapon("Sword", new Attack("Stab")).setMeta({}).setAttackParams({});
 
-
-////////////////////
-
-
-
-let sword = new Weapon("Sword");
-sword.setAuthor("WubzyGD");
-sword.setDescription("A really cool sword.");
-sword.addMetaInfo(sword.description, RarityValkyrie.R2, "Iron", sword.author);
-sword.addCustomDamage(10, "Slicing");
+console.log(sword, sword.metaInfo);
