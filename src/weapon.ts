@@ -1,4 +1,5 @@
 import {Attack} from './attack';
+import { Mod } from './mod';
 
 export class Weapon {
     name: string;
@@ -93,8 +94,21 @@ interface Stats {
     custom?: object
 }
 
-let sword = new Weapon("Sword", new Attack("Stab"))
-.setMeta({})
+let sword = new Weapon("Sword", 
+    new Attack("Stab", 
+        new Mod("Example1", {
+            chance: 40, mode: "reroll_merge", 
+            bonusChance: {
+                force: 5,
+                random: {min: 5, max: 10}
+            }, slugChance: {
+                force: 5,
+                random: {min: 5, max: 10}
+            }}, {damageAdd: 10, multiplier: 1.5, multiplerAC: 10},
+            "default"
+        )
+    )
+).setMeta({})
 .setAttackParams({
     canAttack: true, durability: true, maxRange: 100, durabilityMode: "heap",
     statuses: {holder: null, victim: ["sliced"]},
@@ -102,4 +116,24 @@ let sword = new Weapon("Sword", new Attack("Stab"))
 })
 .editStats({});
 
-console.log(sword, sword.metaInfo);
+let myw = new Weapon("Euclidator", 
+    new Attack("Slash", 
+        new Mod("Dark Damage", 
+        {always: true}, {
+            damageAdd: {
+                force: 3, random: {
+                    min: 2, max: 6
+                }
+            }, statuses: {
+                victim: "-5HP/2 Turns"
+            }
+        }, "disable")
+    ), {
+        canAttack: true,
+        durability: true,
+        maxRange: 5,
+    }
+)
+
+console.log(sword);
+console.log(myw);
