@@ -137,3 +137,8 @@ let myw = new Weapon("Euclidator",
 
 console.log(sword);
 console.log(myw);
+
+let swords = JSON.stringify(sword);
+let swordsd = JSON.parse(swords);
+swordsd.__proto__ = Weapon.prototype;
+console.log(swordsd.attackParams, swordsd instanceof Weapon);
