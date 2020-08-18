@@ -6,6 +6,8 @@ export class Weapon {
     mainAttack: Attack;
     attackParams: object;
 
+    stats: object;
+
     meta: object;
 
 
@@ -13,7 +15,8 @@ export class Weapon {
     constructor (name: string, mainAttack?: Attack, attackParams?: AttackParams, metaInfo?: MetaInfo) {
         this.name = name;
         if (mainAttack) {this.mainAttack = mainAttack;} else {this.mainAttack = null;}
-        if (attackParams) {this.attackParams = attackParams;} else {this.attackParams = null;}
+        if (attackParams) {this.attackParams = Weapon.verifyAttackParams(attackParams, this, true);} else {this.attackParams = null;}
+        if (metaInfo) {this.meta = Weapon.verifyMetaInfo(metaInfo, this, true);} else {this.meta = null;}
     };
 
 
@@ -37,16 +40,24 @@ export class Weapon {
 
 
 
-    private static verifyAttackParams(params: object, w: Weapon, full?: boolean): Weapon {
+    public editStats(newStats: Stats, clearOld?: boolean): Weapon {
+        return this;
+    };
+
+
+
+    private static verifyAttackParams(params: object, w: Weapon, full?: boolean): object {
         if (full) {
             function verify (obj: object): obj is AttackParams {return 'canAttack' in obj}
             if (verify(params)) {w.attackParams = params;} else {throw new SyntaxError("Invalid 'attackParams' given.");}
         }
 
-        return w;
+        return params;
     };
 
-    private static verifyMetaInfo(params: object, w: Weapon, full?: boolean) {};
+    private static verifyMetaInfo(params: object, w: Weapon, full?: boolean): object {
+        return params;
+    };
 
 
 
@@ -68,7 +79,8 @@ interface Effects_Obj {
 
 interface AttackParams {
     canAttack: boolean,
-    durability?: number,
+    durability?: number | boolean,
+    durabilityMode?: "percent" | "default" | "heap" | "state",
     maxRange?: number,
     statuses?: Effects | Effects_Obj,
     custom?: object
@@ -76,6 +88,18 @@ interface AttackParams {
 
 interface MetaInfo {}
 
-let sword = new Weapon("Sword", new Attack("Stab")).setMeta({}).setAttackParams({});
+interface Stats {
+    isBroken?: true,
+    custom?: object
+}
+
+let sword = new Weapon("Sword", new Attack("Stab"))
+.setMeta({})
+.setAttackParams({
+    canAttack: true, durability: true, maxRange: 100, durabilityMode: "heap",
+    statuses: {holder: null, victim: ["sliced"]},
+    custom: {aCustomProperty: "Some Data!"}
+})
+.editStats({});
 
 console.log(sword, sword.metaInfo);
