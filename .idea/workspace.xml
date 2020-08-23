@@ -26,7 +26,11 @@
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/factions/valkaria.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/factions/valkaria.json" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/database.sqlite" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/database.sqlite" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/random.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/dist/random.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/random.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/random.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/weapon.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/weapon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/random.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/random.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weapon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/weapon.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +102,7 @@
       <workItem from="1597720676800" duration="12264000" />
       <workItem from="1597785893814" duration="3271000" />
       <workItem from="1597976336601" duration="2362000" />
-      <workItem from="1598141314373" duration="4982000" />
+      <workItem from="1598141314373" duration="8565000" />
     </task>
     <servers />
   </component>
@@ -130,22 +134,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1597977777747" />
-    <state width="1345" height="172" key="GridCell.Tab.0.bottom" timestamp="1598147363236">
+    <state width="1345" height="172" key="GridCell.Tab.0.bottom" timestamp="1598151633814">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="172" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1598147363236" />
-    <state width="1345" height="172" key="GridCell.Tab.0.center" timestamp="1598147363221">
+    <state width="1345" height="172" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1598151633814" />
+    <state width="1345" height="172" key="GridCell.Tab.0.center" timestamp="1598151633814">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="172" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1598147363221" />
-    <state width="1345" height="172" key="GridCell.Tab.0.left" timestamp="1598147363221">
+    <state width="1345" height="172" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1598151633814" />
+    <state width="1345" height="172" key="GridCell.Tab.0.left" timestamp="1598151633814">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="172" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1598147363221" />
-    <state width="1345" height="172" key="GridCell.Tab.0.right" timestamp="1598147363221">
+    <state width="1345" height="172" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1598151633814" />
+    <state width="1345" height="172" key="GridCell.Tab.0.right" timestamp="1598151633814">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="172" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1598147363221" />
+    <state width="1345" height="172" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1598151633814" />
     <state x="184" y="9" key="SettingsEditor" timestamp="1597978116744">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

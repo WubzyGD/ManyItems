@@ -4,7 +4,15 @@ export declare class Random {
     simple: number | null;
     calcType: "int" | "bubble" | "complex";
     constructor(calcType: "int" | "bubble" | "complex", simple?: number | null, bubble?: RandomBubble | null, complex?: RandomComplex | null);
+    private static err_calcType;
+    calc_int(): number;
+    calc_bubble(): number;
+    calc_complex(): number;
+    calc(type?: "int" | "bubble" | "complex"): number;
     static from(random: Random_Obj): Random;
+    get rand(): number;
+    get calc_simple(): number;
+    get int(): number;
 }
 interface RandomBubble {
     min: number;

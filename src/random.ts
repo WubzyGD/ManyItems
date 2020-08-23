@@ -16,6 +16,39 @@ export class Random {
         this.bubble = bubble;
         this.complex = complex;
         this.simple = simple;
+
+        if (complex !== null) {this.bubble = complex.random;}
+    };
+
+
+
+    private static err_calcType(type: "int" | "bubble" | "complex") {
+        throw new SyntaxError(`Error in calculating random value: This Random instance doesn't have a '${type}' calc registered.`)
+    };
+
+
+
+    public calc_int(): number {
+        if (this.simple === null) {Random.err_calcType("int");}
+        return Math.floor(Math.random() * this.simple + 1);
+    };
+
+    public calc_bubble(): number {
+        if (this.bubble === null) {Random.err_calcType("bubble");}
+        return Math.floor(Math.random() * (this.bubble.max - this.bubble.min + 1) + this.bubble.min);
+    };
+
+    public calc_complex(): number {
+        if (this.complex === null) {Random.err_calcType("complex");}
+        return this.calc_bubble() + this.complex.force;
+    };
+
+    public calc(type?: "int" | "bubble" | "complex"): number {
+        if (!type) {type = this.calcType;}
+        if (type == "int") {return this.calc_int();}
+        else if (type == "bubble") {return this.calc_bubble();}
+        else if (type == "complex") {return this.calc_complex();}
+        else {throw new SyntaxError("Error in calculating random value: Invalid calculation type provided. You may also call the function with no parameters to call your default calc method.");}
     };
 
 
@@ -33,6 +66,7 @@ export class Random {
         if (typeof random == "number") {
             calcType = "int";
             simple = random;
+            bubble = null; complex = null;
         } else if (checkRandomBubble(random)) {
             calcType = "bubble";
             simple = null; complex = null;
@@ -48,6 +82,12 @@ export class Random {
 
         return new Random(calcType, simple, bubble, complex);
     };
+
+    get rand(): number {return this.calc();};
+
+    get calc_simple(): number {return this.calc_int();};
+
+    get int(): number {return this.simple;};
 
 }
 

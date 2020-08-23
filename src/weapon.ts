@@ -142,3 +142,7 @@ interface Stats {
 .setMeta({author: "WubzyGD", rarity: "Common"});
 
 console.log(sword);*/
+
+let r = new Random("complex", null, {min: 5, max: 10}, {force: 2, random: {min: 5, max: 10}});
+
+console.log(r.rand);
