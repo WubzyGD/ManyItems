@@ -1,3 +1,4 @@
+import { Random } from './random';
 export declare class Mod {
     name: string;
     mainEffects: object;
@@ -17,15 +18,6 @@ interface Effects_Obj {
     holder?: Effects;
     all?: Effects;
 }
-interface RandomBubble {
-    min: number;
-    max: number;
-}
-interface RandomComplex {
-    force: number;
-    random: RandomBubble;
-}
-declare type Random = number | RandomBubble | RandomComplex;
 interface ActivateOn {
     always?: boolean;
     chance?: Random;

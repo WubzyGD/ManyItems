@@ -20,18 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5ff57ff6-0895-42d8-aa9c-c536b6ce0bfc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/random.ts" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/factions/crimsakia.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/factions/crimsakia.json" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/factions/havashia.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/factions/havashia.json" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/factions/nataria.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/factions/nataria.json" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/factions/valkaria.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/factions/valkaria.json" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/database.sqlite" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/database.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/ManyItems.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ManyItems.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/attack.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/attack.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mod.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/mod.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +93,7 @@
       <workItem from="1597720676800" duration="12264000" />
       <workItem from="1597785893814" duration="3271000" />
       <workItem from="1597976336601" duration="2362000" />
-      <workItem from="1598141314373" duration="2995000" />
+      <workItem from="1598141314373" duration="3533000" />
     </task>
     <servers />
   </component>
