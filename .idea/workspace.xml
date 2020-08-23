@@ -25,6 +25,8 @@
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/factions/nataria.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/factions/nataria.json" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/factions/valkaria.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/factions/valkaria.json" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/database.sqlite" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/database.sqlite" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,8 +66,11 @@
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
-      <command value="git add ." />
       <command value="git commit -m &quot;v1.0.5&quot;" />
+      <command value="git add ." />
+      <command value="git commit -m &quot;v1.0.6 - Random class&quot;" />
+      <command value="git push origin master" />
+      <command value="npm version minor" />
     </option>
   </component>
   <component name="RunManager">
@@ -93,7 +98,7 @@
       <workItem from="1597720676800" duration="12264000" />
       <workItem from="1597785893814" duration="3271000" />
       <workItem from="1597976336601" duration="2362000" />
-      <workItem from="1598141314373" duration="3533000" />
+      <workItem from="1598141314373" duration="4982000" />
     </task>
     <servers />
   </component>
@@ -125,22 +130,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1597977777747" />
-    <state width="1345" height="172" key="GridCell.Tab.0.bottom" timestamp="1597794545047">
+    <state width="1345" height="172" key="GridCell.Tab.0.bottom" timestamp="1598147363236">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="172" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1597794545047" />
-    <state width="1345" height="172" key="GridCell.Tab.0.center" timestamp="1597794545047">
+    <state width="1345" height="172" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1598147363236" />
+    <state width="1345" height="172" key="GridCell.Tab.0.center" timestamp="1598147363221">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="172" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1597794545047" />
-    <state width="1345" height="172" key="GridCell.Tab.0.left" timestamp="1597794545047">
+    <state width="1345" height="172" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1598147363221" />
+    <state width="1345" height="172" key="GridCell.Tab.0.left" timestamp="1598147363221">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="172" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1597794545047" />
-    <state width="1345" height="172" key="GridCell.Tab.0.right" timestamp="1597794545047">
+    <state width="1345" height="172" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1598147363221" />
+    <state width="1345" height="172" key="GridCell.Tab.0.right" timestamp="1598147363221">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="172" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1597794545047" />
+    <state width="1345" height="172" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1598147363221" />
     <state x="184" y="9" key="SettingsEditor" timestamp="1597978116744">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -157,10 +162,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="456" y="231" width="566" height="284" key="org.intellij.images.editor.actions.BackgroundImageDialog/0.0.1366.728@0.0.1366.728" timestamp="1597978115994" />
-    <state x="339" y="162" width="672" height="677" key="run.anything.popup" timestamp="1597794538113">
+    <state x="339" y="162" width="672" height="677" key="run.anything.popup" timestamp="1598147380080">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="339" y="162" width="672" height="677" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1597794538113" />
+    <state x="339" y="162" width="672" height="677" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1598147380080" />
     <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1597785494605">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
