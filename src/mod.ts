@@ -1,3 +1,5 @@
+import {Random} from './random';
+
 export class Mod {
     name: string;
 
@@ -41,7 +43,7 @@ interface RandomComplex {
     random: RandomBubble,
 }
 
-type Random = number | RandomBubble | RandomComplex;
+type Random_Obj = number | RandomBubble | RandomComplex;
 
 interface ActivateOn {
     always?: boolean,

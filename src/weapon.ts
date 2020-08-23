@@ -1,5 +1,6 @@
 import {Attack} from './attack';
 import { Mod } from './mod';
+import {Random} from './random';
 
 export class Weapon {
     name: string;
