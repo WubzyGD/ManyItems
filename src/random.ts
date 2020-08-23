@@ -17,7 +17,7 @@ export class Random {
         this.complex = complex;
         this.simple = simple;
 
-        if (complex !== null) {this.bubble = complex.random;}
+        if (complex !== null && complex !== undefined) {this.bubble = complex.random;}
     };
 
 
