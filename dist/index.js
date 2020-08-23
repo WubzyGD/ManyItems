@@ -8,3 +8,5 @@ var mod_1 = require("./mod");
 Object.defineProperty(exports, "Mod", { enumerable: true, get: function () { return mod_1.Mod; } });
 var util_1 = require("./util");
 Object.defineProperty(exports, "RarityValkyrie", { enumerable: true, get: function () { return util_1.RarityValkyrie; } });
+var random_1 = require("./random");
+Object.defineProperty(exports, "Random", { enumerable: true, get: function () { return random_1.Random; } });
