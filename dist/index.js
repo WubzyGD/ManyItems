@@ -10,3 +10,5 @@ var util_1 = require("./util");
 Object.defineProperty(exports, "RarityValkyrie", { enumerable: true, get: function () { return util_1.RarityValkyrie; } });
 var random_1 = require("./random");
 Object.defineProperty(exports, "Random", { enumerable: true, get: function () { return random_1.Random; } });
+var char_1 = require("./char");
+Object.defineProperty(exports, "Character", { enumerable: true, get: function () { return char_1.Character; } });
