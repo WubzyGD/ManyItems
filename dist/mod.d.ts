@@ -18,20 +18,29 @@ interface Effects_Obj {
     holder?: Effects;
     all?: Effects;
 }
+interface RandomBubble {
+    min: number;
+    max: number;
+}
+interface RandomComplex {
+    force: number;
+    random: RandomBubble;
+}
+declare type Random_Obj = number | RandomBubble | RandomComplex;
 interface ActivateOn {
     always?: boolean;
-    chance?: Random;
+    chance?: Random | Random_Obj;
     bonus?: boolean | number;
     slug?: boolean | number;
-    bonusChance?: Random;
-    slugChance?: Random;
+    bonusChance?: Random | Random_Obj;
+    slugChance?: Random | Random_Obj;
     mode?: "prioritize_sb" | "prioritize_base" | "merge" | "reroll" | "reroll_merge";
 }
 interface MainEffects {
-    damageAdd: Random;
-    multiplier?: Random;
-    multiplierAC?: Random;
+    damageAdd: Random | Random_Obj;
+    multiplier?: Random | Random_Obj;
+    multiplierAC?: Random | Random_Obj;
     statuses?: Effects | Effects_Obj;
-    statusGrantChance?: Random;
+    statusGrantChance?: Random | Random_Obj;
 }
 export {};

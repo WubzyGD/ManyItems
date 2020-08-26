@@ -10,7 +10,7 @@ class Random {
         this.bubble = bubble;
         this.complex = complex;
         this.simple = simple;
-        if (complex !== null) {
+        if (complex !== null && complex !== undefined) {
             this.bubble = complex.random;
         }
     }

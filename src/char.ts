@@ -2,14 +2,28 @@ export class Character {
     name: string;
     bio: Bio;
     stats: Stats;
+    meta: Meta;
 
-    constructor (name: string, bio: Bio, stats: Stats) {};
+    constructor (name: string, bio: Bio, stats: Stats, meta?: Meta) {
+        this.name = name;
+        this.bio = bio;
+        this.stats = stats;
+        this.meta = meta;
+    };
 
 }
 
 type Alignment = "Lawful Good" | "Lawful Neutral" | "Lawful Evil" | "Neutral Good" | "True Neutral" | "Neutral Evil" | "Chaotic Good" | "Chaotic Neutral" | "Chaotic Evil";
 
-interface Personality {}
+interface Personality {
+    general: string,
+    hobbies?: string | String[],
+    skills?: string | String[],
+    flaws?: string | String[],
+    virtues?: string | String[],
+    past?: string | String[],
+    connections?: string | String[]
+}
 
 interface HP {
     maxHP: number,
@@ -30,4 +44,8 @@ interface Stats {
     alignment: Alignment
 }
 
-interface Meta {}
+interface Meta {
+    author?: string,
+    isOC?: boolean,
+    appearsIn?: string | String[]
+}
