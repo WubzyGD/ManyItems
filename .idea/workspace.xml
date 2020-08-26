@@ -26,8 +26,11 @@
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/factions/valkaria.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/factions/valkaria.json" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/database.sqlite" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/database.sqlite" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/ManyItems.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ManyItems.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_8_17_2020_11_19_PM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_8_17_2020_11_19_PM__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.npmignore" beforeDir="false" afterPath="$PROJECT_DIR$/.npmignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/char.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/char.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,6 +103,7 @@
       <workItem from="1597785893814" duration="3271000" />
       <workItem from="1597976336601" duration="2362000" />
       <workItem from="1598141314373" duration="11325000" />
+      <workItem from="1598438871223" duration="1023000" />
     </task>
     <servers />
   </component>
