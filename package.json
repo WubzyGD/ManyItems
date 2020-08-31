@@ -1,6 +1,6 @@
 {
   "name": "manyitems",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A simple and intuitive item-creator",
   "author": "WubzyGD#8766",
   "main": "dist/index.js",
@@ -16,7 +16,9 @@
   "license": "ISC",
   "displayName": "ManyItems",
   "respository": "https://github.com/Crescent-Shadow-Studios/ManyItems",
-  "publishConfig": {"registry": "https://npm.pkg.github.com/"},
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "dependencies": {
     "typescript": "^3.9.7"
   }
