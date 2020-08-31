@@ -20,17 +20,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5ff57ff6-0895-42d8-aa9c-c536b6ce0bfc" name="Default Changelist" comment="">
+      <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/emotions/confused.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/emotions/confused.json" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/emotions/embarrassed.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/emotions/embarrassed.json" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/emotions/sad.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/emotions/sad.json" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/factions/crimsakia.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/factions/crimsakia.json" afterDir="false" />
-      <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/factions/havashia.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/factions/havashia.json" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/factions/nataria.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/factions/nataria.json" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/factions/valkaria.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/factions/valkaria.json" afterDir="false" />
+      <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/misc/meme.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/misc/meme.json" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/database.sqlite" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/database.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/ManyItems.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ManyItems.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_8_17_2020_11_19_PM_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_8_17_2020_11_19_PM__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.npmignore" beforeDir="false" afterPath="$PROJECT_DIR$/.npmignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/char.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/char.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/mod.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/dist/mod.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/mod.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/mod.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/weapon.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/weapon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mod.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/mod.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/weapon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/weapon.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +107,8 @@
       <workItem from="1597785893814" duration="3271000" />
       <workItem from="1597976336601" duration="2362000" />
       <workItem from="1598141314373" duration="11325000" />
-      <workItem from="1598438871223" duration="1023000" />
+      <workItem from="1598438871223" duration="6017000" />
+      <workItem from="1598773342066" duration="7100000" />
     </task>
     <servers />
   </component>
@@ -135,22 +140,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1597977777747" />
-    <state width="1345" height="172" key="GridCell.Tab.0.bottom" timestamp="1598159891127">
+    <state width="1339" height="172" key="GridCell.Tab.0.bottom" timestamp="1598837362142">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="172" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1598159891127" />
-    <state width="1345" height="172" key="GridCell.Tab.0.center" timestamp="1598159891127">
+    <state width="1339" height="172" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1598837362142" />
+    <state width="1339" height="172" key="GridCell.Tab.0.center" timestamp="1598837362126">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="172" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1598159891127" />
-    <state width="1345" height="172" key="GridCell.Tab.0.left" timestamp="1598159891127">
+    <state width="1339" height="172" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1598837362126" />
+    <state width="1339" height="172" key="GridCell.Tab.0.left" timestamp="1598837362126">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="172" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1598159891127" />
-    <state width="1345" height="172" key="GridCell.Tab.0.right" timestamp="1598159891127">
+    <state width="1339" height="172" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1598837362126" />
+    <state width="1339" height="172" key="GridCell.Tab.0.right" timestamp="1598837362142">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="172" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1598159891127" />
+    <state width="1339" height="172" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1598837362142" />
     <state x="184" y="9" key="SettingsEditor" timestamp="1597978116744">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -171,9 +176,9 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" width="672" height="677" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1598147380080" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1597785494605">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1598776596343">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1597785494605" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1598776596343" />
   </component>
 </project>

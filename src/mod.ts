@@ -23,19 +23,21 @@ export class Mod {
         this.mainEffects = mainEffects;
         this.onBS = onBS;
 
-        if ((bonusAgainst !== null && bonusAgainst !== undefined) && (bonusEffects == null || bonusEffects == undefined)) {
+        if ((bonusAgainst !== null && bonusAgainst !== undefined) && (bonusEffects == null)) {
             throw new SyntaxError("Error in Mod class construction: 'bonusAgainst' is given, but no 'bonusEffects' are specified.");
         } else { if (bonusAgainst !== undefined) {
             this.bonusAgainst = bonusAgainst;
             this.bonusEffects = bonusEffects;
         }}
 
-        if ((slugAgainst !== null && slugAgainst !== undefined) && (slugEffects == null || slugEffects == undefined)) {
+        if ((slugAgainst !== null && slugAgainst !== undefined) && (slugEffects == null)) {
             throw new SyntaxError("Error in Mod class construction: 'slugAgainst' is given, but no 'slugEffects' are specified.");
         } else { if (slugAgainst !== undefined) {
             this.slugAgainst = slugAgainst;
             this.slugEffects = slugEffects;
         }}
+
+        if (!Object.keys(this.activateOn).includes("mode")) {this.activateOn.mode = "merge";}
     };
 
 
@@ -50,7 +52,7 @@ export class Mod {
         if (this.activateOn.always === true) {return {hit: true, slugHit: false, bonusHit: false};}
         if (!victim || this.activateOn.mode == "prioritize_base") {
             if (typeof(this.activateOn.chance) == "number") {
-                if (Math.ceil(Math.random() * this.activateOn.chance) <= this.activateOn.chance) {return {hit: true, slugHit: false, bonusHit: false};}
+                return {hit: Math.ceil(Math.random() * 100) <= this.activateOn.chance, slugHit: false, bonusHit: false};
             }
         } else {
             var mainChance: number; var bonusChance: number; var slugChance: number;
@@ -63,12 +65,12 @@ export class Mod {
             let bonusHit: boolean = false;
             let slugHit: boolean = false;
 
-            if (victim instanceof Character) {if (this.bonusAgainst.includes(victim.name.toLowerCase())) {bonusHit = true} else {bonusHit = false;}}
-            else if (typeof victim == "string") {if (this.bonusAgainst.includes(victim.toLowerCase())) {bonusHit = true} else {bonusHit = false;}}
+            if (victim instanceof Character) {bonusHit = this.bonusAgainst.includes(victim.name.toLowerCase());}
+            else if (typeof victim == "string") {bonusHit = this.bonusAgainst.includes(victim.toLowerCase());}
             else {throw new SyntaxError("Error in Mod heartbeat: Param 'victim' was not either a string or Character");}
 
-            if (victim instanceof Character) {if (this.slugAgainst.includes(victim.name.toLowerCase())) {slugHit = true} else {slugHit = false;}}
-            else if (typeof victim == "string") {if (this.slugAgainst.includes(victim.toLowerCase())) {slugHit = true} else {slugHit = false;}}
+            if (victim instanceof Character) {slugHit = this.slugAgainst.includes(victim.name.toLowerCase());}
+            else if (typeof victim == "string") {slugHit = this.slugAgainst.includes(victim.toLowerCase());}
             else {throw new SyntaxError("Error in Mod heartbeat: Param 'victim' was not either a string or Character");}
 
             if (bonusHit) {
@@ -85,7 +87,7 @@ export class Mod {
                     let t = {hit: true, slugHit: false, bonusHit: false};
                     t[`${type}Hit`] = true;
                     return t;
-                };
+                }
 
                 if (mod.activateOn.mode == "merge") {
                     if (Math.ceil(Math.random() * 100) <= mod.activateOn.chance + mod.activateOn[`${type}Chance`]) {
@@ -112,23 +114,65 @@ export class Mod {
                     if (Math.ceil(Math.random() * 100) <= mod.activateOn[`${type}Chance`] && mainChance <= mod.activateOn.chance) {return sv(type);}
                     else {return {hit: false, slugHit: false, bonusHit: false};}
                 }
-            };
+            }
 
             if (bonusHit) {return specialHit("bonus", this);} else if (slugHit) {return specialHit("slug", this);}
             else {return {hit: true, slugHit: false, bonusHit: false};}
         }
     };
     
-    public wakeup() {
-        
+    public wakeup(target?: null | string | Character, force?: boolean): boolean {
+        if (force) {return true;}
+        if (target) {return this.heartbeat(target).hit;}
+        return this.heartbeat().hit;
     };
-    
+
     public pulse(victim?: string | Character): PulseResults {
         let results: PulseResults = {mod: this, awake: false, alt: null};
-        
-        if (this.pulse(victim)) {
 
-        }
+        if (victim) {var woke = this.heartbeat(victim);}
+        else {var woke = this.heartbeat();}
+
+        if (woke.hit) {
+            var bonusDt: PulseEffectsResults | null;
+            var slugDt: PulseEffectsResults | null;
+
+            results.awake = true;
+
+            function calc(t: "slug" | "bonus" | "main", mod: Mod): PulseEffectsResults {
+                var res: PulseEffectsResults = {damageAdd: 0, statusesGranted: false, statuses: [], multiplied: false, multiply: 1};
+
+                if (mod[`${t}Effects`].damageAdd instanceof Random) {
+                    res.damageAdd = mod[`${t}Effects`].damageAdd.calc();
+                } else if (typeof mod[`${t}Effects`].damageAdd == "number") {
+                    res.multiply = mod[`${t}Effects`].damageAdd;
+                } else {res.damageAdd = Random.from(mod[`${t}Effects`].damageAdd).calc();}
+
+                if (mod[`${t}Effects`].multiplier) {if (mod[`${t}Effects`].multiplier instanceof Random) {
+                    res.multiply = mod[`${t}Effects`].multiplier.calc();
+                } else if (typeof mod[`${t}Effects`].multiplier == "number") {
+                    res.multiply = mod[`${t}Effects`].multiplier;
+                } else {res.multiply = Random.from(mod[`${t}Effects`].multiplier).calc();}}
+
+                if (mod[`${t}Effects`].multiplierAC) {res.multiplied = Math.ceil(Math.random() * 100) <= mod[`${t}Effects`].multiplierAC;}
+                else {res.multiplied = true;}
+
+                res.statuses = mod[`${t}Effects`].statuses;
+                if (mod[`${t}Effects`].statuses) {res.statusesGranted = Math.ceil(Math.random() * 100) <= mod[`${t}Effects`].statusGrantChance;}
+                else {res.statusesGranted = false;}
+
+                return res;
+            }
+
+            let mainDt = calc('main', this);
+            if (woke.bonusHit === true) {bonusDt = calc('bonus', this);} else {bonusDt = null;
+            if (woke.slugHit === true) {slugDt = calc('slug', this);} else {slugDt = null;}}
+            results.alt = {
+                main: mainDt,
+                bonus: bonusDt,
+                slug: slugDt
+            };
+        } else {results.awake = false;}
 
         return results;
     };
@@ -183,20 +227,24 @@ interface HeartbeatResults {
     slugHit: boolean
 }
 
-interface WakeupResults {}
+interface PulseEffectsResults {
+    damageAdd: Random | Random_Obj,
+    multiply: Random | Random_Obj,
+    multiplied: boolean,
+    statuses: Effects | Effects_Obj,
+    statusesGranted: boolean,
+    calculated?: {
+        damage: number,
+        statuses: Effects | Effects_Obj | false
+    }
+}
 
 interface PulseResults {
     mod: Mod,
     awake: boolean,
     alt: {
-
+        main: PulseEffectsResults,
+        bonus: PulseEffectsResults | null,
+        slug: PulseEffectsResults | null
     } | null
 }
-
-
-
-
-
-let ex1 = new Mod("Example1", {always: true}, {damageAdd: 5}, "default");
-
-console.log(ex1.heartbeat());
