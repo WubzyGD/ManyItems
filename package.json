@@ -16,9 +16,6 @@
   "license": "ISC",
   "displayName": "ManyItems",
   "respository": "https://github.com/Crescent-Shadow-Studios/ManyItems",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "dependencies": {
     "typescript": "^3.9.7"
   }

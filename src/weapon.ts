@@ -146,12 +146,3 @@ console.log(sword);*/
 /*let r = new Random("complex", null, {min: 5, max: 10}, {force: 2, random: {min: 5, max: 10}});
 
 console.log(r.rand);*/
-
-let ex1 = new Mod("Example1", {chance: 50, bonusChance: 50}, {damageAdd: 5}, "default", ["Skeleton", "Zombie"], {multiplier: 2, damageAdd: 0}, ["Slime"], {damageAdd: -10});
-
-console.log(ex1.heartbeat(), ex1.heartbeat(), ex1.heartbeat());
-console.log(ex1.heartbeat("Skeleton"), ex1.heartbeat("Zombie"), ex1.heartbeat("Skeleton"));
-console.log(ex1);
-
-console.log(ex1.pulse(), ex1.pulse(), ex1.pulse(), ex1.pulse());
-console.log(ex1.pulse("Skeleton"), ex1.pulse("Skeleton"), ex1.pulse("Zombie"), ex1.pulse("Zombie"));

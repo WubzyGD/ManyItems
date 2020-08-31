@@ -28,12 +28,7 @@
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/factions/valkaria.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/factions/valkaria.json" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/data/misc/meme.json" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/data/misc/meme.json" afterDir="false" />
       <change beforePath="$USER_HOME$/Desktop/Valkyrie/database.sqlite" beforeDir="false" afterPath="$USER_HOME$/Desktop/Valkyrie/database.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/mod.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/dist/mod.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/mod.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/mod.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/weapon.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/weapon.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mod.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/mod.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/weapon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/weapon.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -108,7 +103,7 @@
       <workItem from="1597976336601" duration="2362000" />
       <workItem from="1598141314373" duration="11325000" />
       <workItem from="1598438871223" duration="6017000" />
-      <workItem from="1598773342066" duration="7100000" />
+      <workItem from="1598773342066" duration="7483000" />
     </task>
     <servers />
   </component>
