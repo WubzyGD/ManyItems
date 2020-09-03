@@ -1,6 +1,7 @@
 import {Attack} from './attack';
 import { Mod } from './mod';
 import {Random} from './random';
+import { Character } from './char';
 
 export class Weapon {
     name: string;
@@ -51,18 +52,27 @@ export class Weapon {
         return this;
     };
 
-
-
     public addAttack(attack: Attack): Weapon {
         this.verifyAttacks(this.mainAttack, this.attacks).push(attack);
         return this;
     };
 
-
-
     public editStats(newStats: Stats, clearOld?: boolean): Weapon {
         return this;
     };
+
+    public attack(victim?: string | Character | null, attack?: Attack): number {
+        let damage: number = 0;
+        if (!attack) {
+            if (victim) {damage = this.mainAttack.attack(victim).damage;}
+            else {damage = this.mainAttack.attack().damage;}
+        } else {
+            if (victim) {damage = attack.attack(victim).damage;}
+            else {damage = attack.attack().damage;}
+        }
+
+        return damage;
+    }
 
 
 
@@ -136,12 +146,17 @@ interface Stats {
     custom?: object
 }
 
-/*let sword = new Weapon("Sword")
-.setMainAttack(new Attack("Stab", null))
+let sword = new Weapon("Sword")
+.setMainAttack(new Attack("Stab", {baseDamage: 0}, [new Mod("Double", {chance: 25, bonusChance: 25, mode: "merge"}, {damageAdd: 0, multiplier: 2, multiplierAC: 100}, "default", ["Skeleton", "Zombie"])]))
 .setAttackParams({canAttack: true, durability: true, maxRange: 20, statuses: "bleeding"})
-.setMeta({author: "WubzyGD", rarity: "Common"});
+.setMeta({author: "WubzyGD", rarity: "Common"})
+.addAttack(new Attack("Slash", {baseDamage: 10}, null));
 
-console.log(sword);*/
+console.log(sword);
+
+console.log(sword.attack());
+console.log(sword.attack(null, sword.mainAttack));
+console.log(sword.attack(null, sword.attacks[1]));
 
 /*let r = new Random("complex", null, {min: 5, max: 10}, {force: 2, random: {min: 5, max: 10}});
 
