@@ -127,7 +127,7 @@ export class Mod {
         return this.heartbeat().hit;
     };
 
-    public pulse(victim?: string | Character): PulseResults {
+    public pulse(victim?: string | Character, calculate?: boolean): PulseResults {
         let results: PulseResults = {mod: this, awake: false, alt: null};
 
         if (victim) {var woke = this.heartbeat(victim);}
@@ -170,12 +170,83 @@ export class Mod {
             results.alt = {
                 main: mainDt,
                 bonus: bonusDt,
-                slug: slugDt
+                slug: slugDt,
+                fullCalculate: function(): number {
+                    return results.mod.fullCalculate(results.alt);
+                },
+                sweepStats: function(): Effects | Effects_Obj | false {
+                    return results.mod.sweepStatuses(results.alt);
+                }
             };
+
+            if (calculate === true) {
+                results.alt.calculated = {
+                    statuses: results.mod.sweepStatuses(results.alt),
+                    damage: results.mod.fullCalculate(results.alt)
+                };
+            }
+
         } else {results.awake = false;}
 
         return results;
     };
+
+    public fullCalculate(alt: PulseResultsAlt): number {
+        let total: number = 0;
+        if (this.onBS == "default") {
+            total += alt.main.damageAdd;
+        }
+        if (alt.bonus) {
+            total += alt.bonus.damageAdd;
+            if (alt.bonus.multiplied) {total *= alt.main.multiply;}
+        } else if (alt.slug) {
+            total += alt.slug.damageAdd;
+            if (alt.slug.multiplied) {total *= alt.slug.multiply;}
+        }
+
+        if (this.onBS == "default") {if (alt.main.multiplied) {total *= alt.main.multiply;}}
+
+        return total;
+    };
+
+    public sweepStatuses(alt: PulseResultsAlt): string[] {
+        let stats: string[];
+        if (alt.main.statusesGranted && this.onBS == "default") {
+            if (Array.isArray(alt.main.statuses)) {for (let s of alt.main.statuses) {stats.push(s);}}
+            else if (typeof alt.main.statuses == "string") {stats.push(alt.main.statuses);}
+        }
+        if (alt.bonus.statusesGranted) {
+            if (Array.isArray(alt.bonus.statuses)) {for (let s of alt.bonus.statuses) {stats.push(s);}}
+            else if (typeof alt.bonus.statuses == "string") {stats.push(alt.bonus.statuses);}
+        } else if (alt.slug.statusesGranted) {
+            if (Array.isArray(alt.slug.statuses)) {for (let s of alt.slug.statuses) {stats.push(s);}}
+            else if (typeof alt.slug.statuses == "string") {stats.push(alt.slug.statuses);}
+        }
+
+        let temps: string[] = [];
+        for (let stat of stats) {
+            if (!temps.includes(stat)) {temps.push(stat);}
+        }
+        stats = temps;
+
+        return stats;
+    }
+
+
+
+    public static sweepStatuses(statuses: Effects | Effects_Obj | false): string[] {
+        let stats: string[];
+        if (!statuses) {return [];}
+
+        let temps: string[] = [];
+        for (let stat of stats) {
+            if (!temps.includes(stat)) {temps.push(stat);}
+        }
+        stats = temps;
+
+        return stats;
+    }
+
 }
 
 type Effects = string | Array<string> | null;
@@ -228,23 +299,31 @@ interface HeartbeatResults {
 }
 
 interface PulseEffectsResults {
-    damageAdd: Random | Random_Obj,
-    multiply: Random | Random_Obj,
+    damageAdd: number,
+    multiply: number,
     multiplied: boolean,
     statuses: Effects | Effects_Obj,
     statusesGranted: boolean,
     calculated?: {
         damage: number,
         statuses: Effects | Effects_Obj | false
+    },
+}
+
+interface PulseResultsAlt {
+    main: PulseEffectsResults,
+    bonus: PulseEffectsResults | null,
+    slug: PulseEffectsResults | null,
+    fullCalculate: Function,
+    sweepStats: Function,
+    calculated?: {
+        statuses: Effects | Effects_Obj | false,
+        damage: number
     }
 }
 
 interface PulseResults {
     mod: Mod,
     awake: boolean,
-    alt: {
-        main: PulseEffectsResults,
-        bonus: PulseEffectsResults | null,
-        slug: PulseEffectsResults | null
-    } | null
+    alt: PulseResultsAlt | null
 }
