@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Weapon = void 0;
 const attack_1 = require("./attack");
 const mod_1 = require("./mod");
+const util_1 = require("./util");
 class Weapon {
     constructor(name, mainAttack, attackParams, attacks, metaInfo, stats) {
         this.name = name;
@@ -65,25 +66,32 @@ class Weapon {
         return this;
     }
     ;
-    attack(victim, attack) {
+    attack(victim, attack, returnAtR) {
         let damage = 0;
+        let atk;
         if (!attack) {
             if (victim) {
-                damage = this.mainAttack.attack(victim).damage;
+                atk = this.mainAttack.attack(victim);
             }
             else {
-                damage = this.mainAttack.attack().damage;
+                atk = this.mainAttack.attack();
             }
         }
         else {
             if (victim) {
-                damage = attack.attack(victim).damage;
+                atk = attack.attack(victim);
             }
             else {
-                damage = attack.attack().damage;
+                atk = attack.attack();
             }
         }
-        return damage;
+        damage = atk.damage;
+        if (returnAtR) {
+            return atk;
+        }
+        else {
+            return damage;
+        }
     }
     static verifyAttackParams(params, w, full) {
         if (full) {
@@ -143,14 +151,19 @@ class Weapon {
 }
 exports.Weapon = Weapon;
 let sword = new Weapon("Sword")
-    .setMainAttack(new attack_1.Attack("Stab", { baseDamage: 0 }, [new mod_1.Mod("Double", { chance: 25, bonusChance: 25, mode: "merge" }, { damageAdd: 0, multiplier: 2, multiplierAC: 100 }, "default", ["Skeleton", "Zombie"], { damageAdd: 0 })]))
+    .setMainAttack(new attack_1.Attack("Stab", { baseDamage: 10 }, [new mod_1.Mod("Double", { chance: 25, bonusChance: 25, mode: "merge" }, { damageAdd: 0, multiplier: 2, multiplierAC: 100 }, "default", ["Skeleton", "Zombie"], { damageAdd: 0 })]))
     .setAttackParams({ canAttack: true, durability: true, maxRange: 20, statuses: "bleeding" })
     .setMeta({ author: "WubzyGD", rarity: "Common" })
     .addAttack(new attack_1.Attack("Slash", { baseDamage: 10 }, null));
-console.log(sword);
-console.log(sword.attack());
+//console.log(sword);
+/*console.log(sword.attack());
 console.log(sword.attack(null, sword.mainAttack));
-console.log(sword.attack(null, sword.attacks[1]));
+console.log(sword.attack(null, sword.attacks[1]));*/
+//console.log("\n");
+//console.log(dice.d4.roll());
+let claws = new Weapon("Claws", new attack_1.Attack("Slash", { baseDamage: util_1.dice.d6, statuses: "Slashing" }, [new mod_1.Mod("Bleeding", { chance: 25 }, { damageAdd: 4, statuses: "Bleeding" }, "default")]), { canAttack: true });
+//console.log(claws.attack(), claws.attack(), claws.attack(), claws.attack(), claws.attack());
+console.log(claws.attack(null, null, true));
 /*let r = new Random("complex", null, {min: 5, max: 10}, {force: 2, random: {min: 5, max: 10}});
 
 console.log(r.rand);*/ 

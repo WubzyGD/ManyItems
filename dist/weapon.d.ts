@@ -15,7 +15,7 @@ export declare class Weapon {
     setAttacks(attacks: Array<Attack> | Attack | null): Weapon;
     addAttack(attack: Attack): Weapon;
     editStats(newStats: Stats, clearOld?: boolean): Weapon;
-    attack(victim?: string | Character | null, attack?: Attack): number;
+    attack(victim?: string | Character | null, attack?: Attack | null, returnAtR?: boolean): number | AttackResults;
     private static verifyAttackParams;
     private static verifyMetaInfo;
     private verifyAttacks;
@@ -45,5 +45,11 @@ interface MetaInfo {
 interface Stats {
     isBroken?: true;
     custom?: object;
+}
+interface AttackResults {
+    damage: number;
+    statuses: string[];
+    victim: string | null;
+    attack: Attack;
 }
 export {};

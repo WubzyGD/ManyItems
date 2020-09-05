@@ -1,5 +1,6 @@
 import {Mod} from './mod';
 import { Character } from './char';
+import {Random} from "./random";
 
 export class Attack {
     name: string;
@@ -30,12 +31,14 @@ export class Attack {
         };
         let damage = 0;
 
-        damage += this.baseInfo.baseDamage;
+        if (this.baseInfo.baseDamage instanceof Random) {damage += this.baseInfo.baseDamage.calc();}
+        else {damage += this.baseInfo.baseDamage;}
+
         if (this.mods) {
             let modInfo = [];
-            for (let mod of this.mods) {if (victim) {modInfo.push(mod.pulse(victim));} else {modInfo.push(mod.pulse());}}
+            for (let mod of this.mods) {if (mod) {if (victim) {modInfo.push(mod.pulse(victim));} else {modInfo.push(mod.pulse());}}}
             for (let mod of modInfo) {
-                if (mod !== null) {
+                if (mod !== null && mod.alt !== null) {
                     damage += mod.alt.fullCalculate();
                     for (let s of mod.alt.sweepStatuses()) {
                         results.statuses.push(s);
@@ -45,6 +48,11 @@ export class Attack {
             }
         }
         if (this.baseInfo.healing == true) {damage *= -1;}
+        if (this.baseInfo.statuses && typeof this.baseInfo.statuses !== "object") {
+            if (typeof this.baseInfo.statuses == "string") {this.baseInfo.statuses = [this.baseInfo.statuses];}
+            for (let s of this.baseInfo.statuses) {results.statuses.push(s);}
+            results.statuses = Mod.sweepStatuses(results.statuses);
+        }
 
         results.damage = damage;
         if (!victim) {results.victim = null;}
@@ -70,7 +78,7 @@ interface Effects_Obj {
 }
 
 interface AttackBaseInfo {
-    baseDamage: number,
+    baseDamage: number | Random,
     healing?: boolean,
     hitType?: string,
     statuses?: Effects | Effects_Obj

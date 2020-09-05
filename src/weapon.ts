@@ -2,6 +2,7 @@ import {Attack} from './attack';
 import { Mod } from './mod';
 import {Random} from './random';
 import { Character } from './char';
+import {dice} from "./util";
 
 export class Weapon {
     name: string;
@@ -61,17 +62,20 @@ export class Weapon {
         return this;
     };
 
-    public attack(victim?: string | Character | null, attack?: Attack): number {
+    public attack(victim?: string | Character | null, attack?: Attack | null, returnAtR?: boolean): number | AttackResults {
         let damage: number = 0;
+        let atk: AttackResults;
         if (!attack) {
-            if (victim) {damage = this.mainAttack.attack(victim).damage;}
-            else {damage = this.mainAttack.attack().damage;}
+            if (victim) {atk = this.mainAttack.attack(victim);}
+            else {atk = this.mainAttack.attack();}
         } else {
-            if (victim) {damage = attack.attack(victim).damage;}
-            else {damage = attack.attack().damage;}
+            if (victim) {atk = attack.attack(victim);}
+            else {atk = attack.attack();}
         }
 
-        return damage;
+        damage = atk.damage;
+
+        if (returnAtR) {return atk;} else {return damage;}
     }
 
 
@@ -146,17 +150,34 @@ interface Stats {
     custom?: object
 }
 
+interface AttackResults {
+    damage: number,
+    statuses: string[],
+    victim: string | null,
+    attack: Attack
+}
+
+
+
 let sword = new Weapon("Sword")
-.setMainAttack(new Attack("Stab", {baseDamage: 0}, [new Mod("Double", {chance: 25, bonusChance: 25, mode: "merge"}, {damageAdd: 0, multiplier: 2, multiplierAC: 100}, "default", ["Skeleton", "Zombie"], {damageAdd: 0})]))
+.setMainAttack(new Attack("Stab", {baseDamage: 10}, [new Mod("Double", {chance: 25, bonusChance: 25, mode: "merge"}, {damageAdd: 0, multiplier: 2, multiplierAC: 100}, "default", ["Skeleton", "Zombie"], {damageAdd: 0})]))
 .setAttackParams({canAttack: true, durability: true, maxRange: 20, statuses: "bleeding"})
 .setMeta({author: "WubzyGD", rarity: "Common"})
 .addAttack(new Attack("Slash", {baseDamage: 10}, null));
 
-console.log(sword);
+//console.log(sword);
 
-console.log(sword.attack());
+/*console.log(sword.attack());
 console.log(sword.attack(null, sword.mainAttack));
-console.log(sword.attack(null, sword.attacks[1]));
+console.log(sword.attack(null, sword.attacks[1]));*/
+
+//console.log("\n");
+
+//console.log(dice.d4.roll());
+
+let claws = new Weapon("Claws", new Attack("Slash", {baseDamage: dice.d6, statuses: "Slashing"}, [new Mod("Bleeding", {chance: 25}, {damageAdd: 4, statuses: "Bleeding"}, "default")]), {canAttack: true});
+//console.log(claws.attack(), claws.attack(), claws.attack(), claws.attack(), claws.attack());
+console.log(claws.attack(null, null, true));
 
 /*let r = new Random("complex", null, {min: 5, max: 10}, {force: 2, random: {min: 5, max: 10}});
 

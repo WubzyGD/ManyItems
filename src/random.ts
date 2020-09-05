@@ -83,6 +83,8 @@ export class Random {
         return new Random(calcType, simple, bubble, complex);
     };
 
+    public roll(): number {return this.calc();};
+
     get rand(): number {return this.calc();};
 
     get calc_simple(): number {return this.calc_int();};

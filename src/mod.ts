@@ -37,6 +37,10 @@ export class Mod {
             this.slugEffects = slugEffects;
         }}
 
+        if (typeof mainEffects.statuses == "string") {this.mainEffects.statuses = [mainEffects.statuses];}
+        if (bonusEffects && typeof bonusEffects.statuses == "string") {this.bonusEffects.statuses = [bonusEffects.statuses];}
+        if (slugEffects && typeof slugEffects.statuses == "string") {this.slugEffects.statuses = [slugEffects.statuses];}
+
         if (!Object.keys(this.activateOn).includes("mode")) {this.activateOn.mode = "merge";}
     };
 
@@ -49,11 +53,12 @@ export class Mod {
 
 
     public heartbeat(victim?: string | Character): HeartbeatResults {
+        //console.log("Pulsing for mod " + this.name);
         if (this.activateOn.always === true) {return {hit: true, slugHit: false, bonusHit: false};}
         if (!victim || this.activateOn.mode == "prioritize_base") {
             if (typeof(this.activateOn.chance) == "number") {
                 return {hit: Math.ceil(Math.random() * 100) <= this.activateOn.chance, slugHit: false, bonusHit: false};
-            }
+            } else {throw new SyntaxError("Error in Mod heartbeat: activateOn.chance does not seem to be a number, and no other routes are possible for attempting to wake up the Mod.");}
         } else {
             var mainChance: number; var bonusChance: number; var slugChance: number;
             if (typeof(this.activateOn.chance) == "number") {mainChance = Math.ceil(Math.random() * 100);}
@@ -157,9 +162,19 @@ export class Mod {
                 if (mod[`${t}Effects`].multiplierAC) {res.multiplied = Math.ceil(Math.random() * 100) <= mod[`${t}Effects`].multiplierAC;}
                 else {res.multiplied = true;}
 
-                res.statuses = mod[`${t}Effects`].statuses;
-                if (mod[`${t}Effects`].statuses) {res.statusesGranted = Math.ceil(Math.random() * 100) <= mod[`${t}Effects`].statusGrantChance;}
-                else {res.statusesGranted = false;}
+                if (Array.isArray(mod[`${t}Effects`].statuses)) {
+                    if (!Array.isArray(res.statuses) && typeof res.statuses != "string") {res.statuses = [];}
+                    else if (!Array.isArray(res.statuses)) {res.statuses = [res.statuses];}
+                    for (let s of mod[`${t}Effects`].statuses) {res.statuses.push(s);}
+                } else if (typeof mod[`${t}Effects`].statuses == "string") {
+                    if (Array.isArray(res.statuses)) {res.statuses.push(mod[`${t}Effects`].statuses);}
+                    else {res.statuses = [mod[`${t}Effects`].statuses];}
+                } else {res.statuses = null;}
+                if ((Array.isArray(res.statuses) && res.statuses.length == 0) || (typeof res.statuses == "string" && res.statuses.length == 0)) {res.statuses= null;}
+                if (res.statuses && mod[`${t}Effects`].statusGrantChance) {res.statusesGranted = Math.ceil(Math.random() * 100) <= mod[`${t}Effects`].statusGrantChance;}
+                else {res.statusesGranted = typeof res.statuses == "string" || Array.isArray(res.statuses);}
+
+                //console.log(res);
 
                 return res;
             }
@@ -188,6 +203,8 @@ export class Mod {
 
         } else {results.awake = false;}
 
+        //console.log(results.alt.sweepStatuses());
+
         return results;
     };
 
@@ -211,14 +228,14 @@ export class Mod {
 
     public sweepStatuses(alt: PulseResultsAlt): string[] {
         let stats: string[] = [];
-        if (alt.main.statusesGranted && this.onBS == "default") {
+        if (alt.main && alt.main.statusesGranted && this.onBS == "default") {
             if (Array.isArray(alt.main.statuses)) {for (let s of alt.main.statuses) {stats.push(s);}}
             else if (typeof alt.main.statuses == "string") {stats.push(alt.main.statuses);}
         }
-        if (alt.bonus.statusesGranted) {
+        if (alt.bonus && alt.bonus.statusesGranted) {
             if (Array.isArray(alt.bonus.statuses)) {for (let s of alt.bonus.statuses) {stats.push(s);}}
             else if (typeof alt.bonus.statuses == "string") {stats.push(alt.bonus.statuses);}
-        } else if (alt.slug.statusesGranted) {
+        } else if (alt.slug && alt.slug.statusesGranted) {
             if (Array.isArray(alt.slug.statuses)) {for (let s of alt.slug.statuses) {stats.push(s);}}
             else if (typeof alt.slug.statuses == "string") {stats.push(alt.slug.statuses);}
         }
@@ -236,7 +253,11 @@ export class Mod {
 
     public static sweepStatuses(statuses: Effects | Effects_Obj | false): string[] {
         let stats: string[];
+        //console.log(stats);
         if (!statuses) {return [];}
+
+        if (Array.isArray(statuses)) {stats = statuses;}
+        else if (typeof statuses == "string") {stats = [statuses];}
 
         let temps: string[] = [];
         for (let stat of stats) {

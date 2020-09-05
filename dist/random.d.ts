@@ -10,6 +10,7 @@ export declare class Random {
     calc_complex(): number;
     calc(type?: "int" | "bubble" | "complex"): number;
     static from(random: Random_Obj): Random;
+    roll(): number;
     get rand(): number;
     get calc_simple(): number;
     get int(): number;

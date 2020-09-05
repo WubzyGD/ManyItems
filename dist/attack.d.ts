@@ -1,5 +1,6 @@
 import { Mod } from './mod';
 import { Character } from './char';
+import { Random } from "./random";
 export declare class Attack {
     name: string;
     baseInfo: AttackBaseInfo;
@@ -18,7 +19,7 @@ interface Effects_Obj {
     all?: Effects;
 }
 interface AttackBaseInfo {
-    baseDamage: number;
+    baseDamage: number | Random;
     healing?: boolean;
     hitType?: string;
     statuses?: Effects | Effects_Obj;

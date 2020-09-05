@@ -89,6 +89,8 @@ class Random {
         return new Random(calcType, simple, bubble, complex);
     }
     ;
+    roll() { return this.calc(); }
+    ;
     get rand() { return this.calc(); }
     ;
     get calc_simple() { return this.calc_int(); }
