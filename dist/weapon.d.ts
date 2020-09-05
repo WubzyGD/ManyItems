@@ -1,4 +1,5 @@
 import { Attack } from './attack';
+import { Character } from './char';
 export declare class Weapon {
     name: string;
     mainAttack: Attack;
@@ -14,6 +15,7 @@ export declare class Weapon {
     setAttacks(attacks: Array<Attack> | Attack | null): Weapon;
     addAttack(attack: Attack): Weapon;
     editStats(newStats: Stats, clearOld?: boolean): Weapon;
+    attack(victim?: string | Character | null, attack?: Attack): number;
     private static verifyAttackParams;
     private static verifyMetaInfo;
     private verifyAttacks;

@@ -174,7 +174,7 @@ export class Mod {
                 fullCalculate: function(): number {
                     return results.mod.fullCalculate(results.alt);
                 },
-                sweepStats: function(): Effects | Effects_Obj | false {
+                sweepStatuses: function(): Effects | Effects_Obj | false {
                     return results.mod.sweepStatuses(results.alt);
                 }
             };
@@ -210,7 +210,7 @@ export class Mod {
     };
 
     public sweepStatuses(alt: PulseResultsAlt): string[] {
-        let stats: string[];
+        let stats: string[] = [];
         if (alt.main.statusesGranted && this.onBS == "default") {
             if (Array.isArray(alt.main.statuses)) {for (let s of alt.main.statuses) {stats.push(s);}}
             else if (typeof alt.main.statuses == "string") {stats.push(alt.main.statuses);}
@@ -315,7 +315,7 @@ interface PulseResultsAlt {
     bonus: PulseEffectsResults | null,
     slug: PulseEffectsResults | null,
     fullCalculate: Function,
-    sweepStats: Function,
+    sweepStatuses: Function,
     calculated?: {
         statuses: Effects | Effects_Obj | false,
         damage: number

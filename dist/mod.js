@@ -183,7 +183,7 @@ class Mod {
         return this.heartbeat().hit;
     }
     ;
-    pulse(victim) {
+    pulse(victim, calculate) {
         let results = { mod: this, awake: false, alt: null };
         if (victim) {
             var woke = this.heartbeat(victim);
@@ -248,8 +248,20 @@ class Mod {
             results.alt = {
                 main: mainDt,
                 bonus: bonusDt,
-                slug: slugDt
+                slug: slugDt,
+                fullCalculate: function () {
+                    return results.mod.fullCalculate(results.alt);
+                },
+                sweepStatuses: function () {
+                    return results.mod.sweepStatuses(results.alt);
+                }
             };
+            if (calculate === true) {
+                results.alt.calculated = {
+                    statuses: results.mod.sweepStatuses(results.alt),
+                    damage: results.mod.fullCalculate(results.alt)
+                };
+            }
         }
         else {
             results.awake = false;
@@ -257,5 +269,85 @@ class Mod {
         return results;
     }
     ;
+    fullCalculate(alt) {
+        let total = 0;
+        if (this.onBS == "default") {
+            total += alt.main.damageAdd;
+        }
+        if (alt.bonus) {
+            total += alt.bonus.damageAdd;
+            if (alt.bonus.multiplied) {
+                total *= alt.main.multiply;
+            }
+        }
+        else if (alt.slug) {
+            total += alt.slug.damageAdd;
+            if (alt.slug.multiplied) {
+                total *= alt.slug.multiply;
+            }
+        }
+        if (this.onBS == "default") {
+            if (alt.main.multiplied) {
+                total *= alt.main.multiply;
+            }
+        }
+        return total;
+    }
+    ;
+    sweepStatuses(alt) {
+        let stats = [];
+        if (alt.main.statusesGranted && this.onBS == "default") {
+            if (Array.isArray(alt.main.statuses)) {
+                for (let s of alt.main.statuses) {
+                    stats.push(s);
+                }
+            }
+            else if (typeof alt.main.statuses == "string") {
+                stats.push(alt.main.statuses);
+            }
+        }
+        if (alt.bonus.statusesGranted) {
+            if (Array.isArray(alt.bonus.statuses)) {
+                for (let s of alt.bonus.statuses) {
+                    stats.push(s);
+                }
+            }
+            else if (typeof alt.bonus.statuses == "string") {
+                stats.push(alt.bonus.statuses);
+            }
+        }
+        else if (alt.slug.statusesGranted) {
+            if (Array.isArray(alt.slug.statuses)) {
+                for (let s of alt.slug.statuses) {
+                    stats.push(s);
+                }
+            }
+            else if (typeof alt.slug.statuses == "string") {
+                stats.push(alt.slug.statuses);
+            }
+        }
+        let temps = [];
+        for (let stat of stats) {
+            if (!temps.includes(stat)) {
+                temps.push(stat);
+            }
+        }
+        stats = temps;
+        return stats;
+    }
+    static sweepStatuses(statuses) {
+        let stats;
+        if (!statuses) {
+            return [];
+        }
+        let temps = [];
+        for (let stat of stats) {
+            if (!temps.includes(stat)) {
+                temps.push(stat);
+            }
+        }
+        stats = temps;
+        return stats;
+    }
 }
 exports.Mod = Mod;

@@ -13,7 +13,10 @@ export declare class Mod {
     private cleanActivateOn;
     heartbeat(victim?: string | Character): HeartbeatResults;
     wakeup(target?: null | string | Character, force?: boolean): boolean;
-    pulse(victim?: string | Character): PulseResults;
+    pulse(victim?: string | Character, calculate?: boolean): PulseResults;
+    fullCalculate(alt: PulseResultsAlt): number;
+    sweepStatuses(alt: PulseResultsAlt): string[];
+    static sweepStatuses(statuses: Effects | Effects_Obj | false): string[];
 }
 declare type Effects = string | Array<string> | null;
 interface Effects_Obj {
@@ -55,8 +58,8 @@ interface HeartbeatResults {
     slugHit: boolean;
 }
 interface PulseEffectsResults {
-    damageAdd: Random | Random_Obj;
-    multiply: Random | Random_Obj;
+    damageAdd: number;
+    multiply: number;
     multiplied: boolean;
     statuses: Effects | Effects_Obj;
     statusesGranted: boolean;
@@ -65,13 +68,20 @@ interface PulseEffectsResults {
         statuses: Effects | Effects_Obj | false;
     };
 }
+interface PulseResultsAlt {
+    main: PulseEffectsResults;
+    bonus: PulseEffectsResults | null;
+    slug: PulseEffectsResults | null;
+    fullCalculate: Function;
+    sweepStatuses: Function;
+    calculated?: {
+        statuses: Effects | Effects_Obj | false;
+        damage: number;
+    };
+}
 interface PulseResults {
     mod: Mod;
     awake: boolean;
-    alt: {
-        main: PulseEffectsResults;
-        bonus: PulseEffectsResults | null;
-        slug: PulseEffectsResults | null;
-    } | null;
+    alt: PulseResultsAlt | null;
 }
 export {};

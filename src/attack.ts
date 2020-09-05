@@ -35,9 +35,13 @@ export class Attack {
             let modInfo = [];
             for (let mod of this.mods) {if (victim) {modInfo.push(mod.pulse(victim));} else {modInfo.push(mod.pulse());}}
             for (let mod of modInfo) {
-                damage += mod.alt.fullCalculate();
-                for (let s of mod.alt.sweepStatuses()) {results.statuses.push(s);}
-                results.statuses = Mod.sweepStatuses(results.statuses);
+                if (mod !== null) {
+                    damage += mod.alt.fullCalculate();
+                    for (let s of mod.alt.sweepStatuses()) {
+                        results.statuses.push(s);
+                    }
+                    results.statuses = Mod.sweepStatuses(results.statuses);
+                }
             }
         }
         if (this.baseInfo.healing == true) {damage *= -1;}
