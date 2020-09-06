@@ -46,7 +46,7 @@ class Mod {
     }
     ;
     heartbeat(victim) {
-        console.log("Pulsing for mod " + this.name);
+        //console.log("Pulsing for mod " + this.name);
         if (this.activateOn.always === true) {
             return { hit: true, slugHit: false, bonusHit: false };
         }

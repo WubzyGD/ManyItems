@@ -46,7 +46,6 @@ class Attack {
                     for (let s of mod.alt.sweepStatuses()) {
                         results.statuses.push(s);
                     }
-                    console.log(results.statuses);
                     results.statuses = mod_1.Mod.sweepStatuses(results.statuses);
                 }
             }

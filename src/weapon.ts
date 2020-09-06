@@ -159,11 +159,11 @@ interface AttackResults {
 
 
 
-let sword = new Weapon("Sword")
+/*let sword = new Weapon("Sword")
 .setMainAttack(new Attack("Stab", {baseDamage: 10}, [new Mod("Double", {chance: 25, bonusChance: 25, mode: "merge"}, {damageAdd: 0, multiplier: 2, multiplierAC: 100}, "default", ["Skeleton", "Zombie"], {damageAdd: 0})]))
 .setAttackParams({canAttack: true, durability: true, maxRange: 20, statuses: "bleeding"})
 .setMeta({author: "WubzyGD", rarity: "Common"})
-.addAttack(new Attack("Slash", {baseDamage: 10}, null));
+.addAttack(new Attack("Slash", {baseDamage: 10}, null));*/
 
 //console.log(sword);
 
@@ -175,9 +175,9 @@ console.log(sword.attack(null, sword.attacks[1]));*/
 
 //console.log(dice.d4.roll());
 
-let claws = new Weapon("Claws", new Attack("Slash", {baseDamage: dice.d6, statuses: "Slashing"}, [new Mod("Bleeding", {chance: 25}, {damageAdd: 4, statuses: "Bleeding"}, "default")]), {canAttack: true});
+//let claws = new Weapon("Claws", new Attack("Slash", {baseDamage: dice.d6, statuses: "Slashing"}, [new Mod("Bleeding", {chance: 25}, {damageAdd: 4, statuses: "Bleeding"}, "default")]), {canAttack: true});
 //console.log(claws.attack(), claws.attack(), claws.attack(), claws.attack(), claws.attack());
-console.log(claws.attack(null, null, true));
+//console.log(claws.attack(null, null, true));
 
 /*let r = new Random("complex", null, {min: 5, max: 10}, {force: 2, random: {min: 5, max: 10}});
 
