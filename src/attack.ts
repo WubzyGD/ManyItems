@@ -3,13 +3,22 @@ import { Character } from './char';
 import {Random} from "./random";
 
 export class Attack {
+    /**
+     * Attack controls all forms of attacking
+     * This includes healing
+     * 
+     * @constructor
+     * @param name {string} A string showing the display name of the weapon
+     * @param baseInfo {AttackBaseInfo} object describing the standard behavior of the attack without any mods.
+     */
+    
+
     name: string;
-
     baseInfo: AttackBaseInfo;
-
     mods: Array<Mod> | null;
-
     castText: string;
+
+
 
     constructor (name: string, baseInfo: AttackBaseInfo, mods: Array<Mod> | Mod | null, castText?: string, ) {
         this.name = name;
@@ -21,6 +30,8 @@ export class Attack {
 
         this.castText = castText;
     }
+
+
 
     public attack(victim?: string | Character): AttackResults {
         let results: AttackResults = {
@@ -61,6 +72,8 @@ export class Attack {
 
         return results;
     }
+
+    public 
 
 }
 
