@@ -184,3 +184,20 @@ console.log(sword.attack(null, sword.attacks[1]));*/
 /*let r = new Random("complex", null, {min: 5, max: 10}, {force: 2, random: {min: 5, max: 10}});
 
 console.log(r.rand);*/
+
+/*let v = new Character("Vincent Northwood",
+    {species: "Demon", age: 112, classtype: "Raven", gender: "Male", level: 0, xp: 0},
+    {hp: {maxHP: 1000, latticeHP: new Random("bubble", null, {min: 50, max: 250}, null).calc()},
+        alignment: "Chaotic Neutral"
+    });
+console.log(v.max());
+v.level += 1;
+console.log(v.max());
+console.log(v);
+var prev: number;
+for (let i:number=0;i<=10;i++) {
+    v.level=i;
+    if (prev) {var prevstr = `; This takes ${v.max()-prev} XP more than the previous level.`;} else {var prevstr='';}
+    console.log(`Max at Level ${v.level}: ${v.max()}${prevstr}`);
+    prev = v.max();
+}*/

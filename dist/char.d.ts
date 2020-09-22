@@ -6,17 +6,23 @@ export declare class Character {
     inventory: Inventory;
     protected cflow: Flow;
     onDeath: OnDeath;
+    protected isDead: boolean;
     level: number;
     xp: number;
-    protected increaseFormula: IncreaseFormula;
+    protected increaseFormula: Function;
     constructor(name: string, bio: Bio, stats: Stats, inventory?: Inventory | null, meta?: Meta);
     takeDamage(damage: number, nokill?: boolean): Character;
+    heal(hp: number): Character;
+    max(): number;
     kill(message?: string): void;
     get lvlstr(): string;
-    get formula(): IncreaseFormula;
-    set formula(f: IncreaseFormula);
+    get formula(): Function;
+    set formula(formula: Function);
     get killHP(): number | "-max" | "-1/2max" | '-2/3max';
     set killHP(hp: number | "-max" | "-1/2max" | '-2/3max');
+    get flow(): Flow;
+    set flow(flow: Flow);
+    get dead(): boolean;
 }
 declare type Alignment = "Lawful Good" | "Lawful Neutral" | "Lawful Evil" | "Neutral Good" | "True Neutral" | "Neutral Evil" | "Chaotic Good" | "Chaotic Neutral" | "Chaotic Evil";
 interface Personality {
@@ -39,7 +45,7 @@ interface Bio {
     age: number | "Unknown" | "Secret";
     level?: number;
     xp?: number;
-    class?: string;
+    classtype?: string;
     gender?: string;
     personality?: Personality;
 }
@@ -69,10 +75,6 @@ interface Inventory {
     offHand?: string | object | null;
     otherHands?: [string | object | null][];
     items: Array<string> | Array<object> | object | null;
-}
-interface IncreaseFormula {
-    str: string;
-    max: Function;
 }
 interface Flow {
 }

@@ -3,7 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Character = void 0;
 class Character {
     constructor(name, bio, stats, inventory, meta) {
-        this.increaseFormula = { str: '', max: function (s) { } };
+        this.isDead = false;
+        this.level = 0;
+        this.xp = 0;
+        this.increaseFormula = function (lvl, char) {
+            lvl += 1;
+            return Math.floor((lvl * (100 * (lvl * .3))) + ((lvl * 6) + (0.3 * (100 * lvl)) + (3 * (lvl ^ 2))));
+        };
         this.name = name;
         this.stats = stats;
         this.meta = meta;
@@ -49,29 +55,61 @@ class Character {
         return this;
     }
     ;
-    //public heal() {};
+    heal(hp) {
+        if (typeof hp != "number" && typeof hp != "string") {
+            throw new TypeError("Error in Character#heal: Param 'hp' must be of type 'number' or 'string'.");
+        }
+        if (typeof hp == "string") {
+            if (isNaN(hp)) {
+                throw new TypeError("Error in Character#heal: Param 'hp' is string but cannot be converted to number.");
+            }
+            else {
+                hp = Number(hp);
+            }
+        }
+        return this.takeDamage(hp * -1);
+    }
+    ;
+    max() {
+        return this.formula(this.level, this);
+    }
+    ;
     //public levelUp() {};
     //public getXp() {};
+    //public setFormula(formula: string): Character {};
     //public useWeapon(w: Weapon) {};
     //public useItem(i) {};
     kill(message) {
+        message = message ? message : this.onDeath.deathMessage;
     }
     ;
     //public revive() {};
-    //public flow() {};
     //public setFormula() {};
     //public setKillHP(hp: number) {};
+    //public setFlow(flow: Flow): Character {};
     //public static inventory() {};
     get lvlstr() {
-        return `Level ${this.level} - `;
+        return `Level ${this.level} - [${this.xp}/${this.formula(this.level, this)}]`;
     }
     ;
     get formula() {
         return this.increaseFormula;
     }
-    set formula(f) {
-        this.formula = f;
+    ;
+    set formula(formula) {
+        if (typeof formula !== "function") {
+            throw new TypeError("Formula must be a function!");
+        }
+        let test = formula(this.level, this.xp, this);
+        if (!test && test !== 0) {
+            throw new EvalError("Formula does not have a return parameter. Please finish with a return statement that passes a number.");
+        }
+        if (typeof test !== "number") {
+            throw new EvalError("Formula does not return a number, instead returns '" + typeof test + "'. Make sure your types are correctly lined up and that you're returning a number!");
+        }
+        this.increaseFormula = formula;
     }
+    ;
     get killHP() {
         if (typeof this.stats.hp.killHP == "number") {
             return this.stats.hp.killHP;
@@ -95,6 +133,17 @@ class Character {
     ;
     set killHP(hp) {
         this.stats.hp.killHP = hp;
+    }
+    ;
+    get flow() {
+        return this.cflow;
+    }
+    ;
+    set flow(flow) {
+    }
+    ;
+    get dead() {
+        return this.isDead;
     }
     ;
 }
