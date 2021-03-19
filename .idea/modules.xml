@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/ManyItems.iml" filepath="$PROJECT_DIR$/.idea/ManyItems.iml" />
-      <module fileurl="file://$USER_HOME$/Desktop/valkyrie/.idea/Valkyrie.iml" filepath="$USER_HOME$/Desktop/valkyrie/.idea/Valkyrie.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ManyItems-v2.iml" filepath="$PROJECT_DIR$/.idea/ManyItems-v2.iml" />
     </modules>
   </component>
 </project>

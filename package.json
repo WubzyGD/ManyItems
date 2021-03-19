@@ -1,12 +1,12 @@
 {
   "name": "manyitems",
-  "version": "1.1.5",
-  "description": "A simple and intuitive item-management library, built in pure TypeScript, made to help create, use, and manage items for RPG-like games.",
+  "version": "2.0.0",
+  "description": "A simple and intuitive item-creator",
   "author": "WubzyGD#8766",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "tsc && node dist/weapon.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "rpg",

@@ -51,6 +51,14 @@ export class Random {
         else {throw new SyntaxError("Error in calculating random value: Invalid calculation type provided. You may also call the function with no parameters to call your default calc method.");}
     };
 
+    public roll(): number {return this.calc();};
+
+    get rand(): number {return this.calc();};
+
+    get calc_simple(): number {return this.calc_int();};
+
+    get int(): number {return this.simple;};
+
 
 
     public static from(random: Random_Obj): Random {
@@ -83,15 +91,27 @@ export class Random {
         return new Random(calcType, simple, bubble, complex);
     };
 
-    public roll(): number {return this.calc();};
 
-    get rand(): number {return this.calc();};
 
-    get calc_simple(): number {return this.calc_int();};
+    public static calc_int(int: number): number {
+        if (int === null) {Random.err_calcType("int");}
+        return Math.floor(Math.random() * int + 1);
+    };
 
-    get int(): number {return this.simple;};
+    public static calc_bubble(bubble: RandomBubble): number {
+        if (bubble === null) {Random.err_calcType("bubble");}
+        return Math.floor(Math.random() * (bubble.max - bubble.min + 1) + bubble.min);
+    };
+
+    public static calc_complex(complexity: RandomComplex): number {
+        if (complexity === null) {Random.err_calcType("complex");}
+        return Random.calc_bubble(complexity.random) + complexity.force;
+    };
+
+    public static calc_simple(int: number): number {return Random.calc_int(int);};
 
 }
+
 
 interface RandomBubble {
     min: number,

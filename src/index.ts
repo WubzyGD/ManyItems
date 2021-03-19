@@ -1,7 +1,6 @@
-export {Weapon} from './weapon';
-export {Attack} from './attack';
-export {Mod} from './mod';
-export {RarityValkyrie, dice} from './util';
-export {Random} from './random';
-export {Character} from './char';
-export {Dialogue, DialogueSequence, DialogueSequenceWithFlow, DialogueWithFlow} from './dialogue';
+export {Item} from './item';
+export {Weapon} from './item/weapon';
+
+export {Random} from './util/random';
+
+export {DamageHandler} from './handler/damage/damage';
