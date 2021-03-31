@@ -1,28 +1,43 @@
 import {DurabilityStateError} from "../../../util/errors/durability";
-import {DurabilityStateEvents} from "./durabilitystateevents";
+import {DurabilityStateEvents, StateChangeReturn} from "./durabilitystateevents";
 
 export class Durability {
+
     maxDurability: number;
     canBreak: boolean = true;
     canBecomeIrreparable: boolean = true;
     shatterOnBreak: boolean = false;
-    margins: durabilityMargins;
+    margins: DurabilityMargins;
+    stateEvents: DurabilityStateEvents = new DurabilityStateEvents();
+    bypassMarginsOnStateChange: boolean = false;
+    disableAutoState: boolean = true;
 
-    private _brokenState: durabilityState = "healthy";
+    private _brokenState: DurabilityState = "healthy";
     private _durability: number;
-    private _stateEvents: DurabilityStateEvents;
 
 
 
-    constructor (maxDurability: number, options?: durabilityOptions) {
+    constructor (maxDurability: number, options?: DurabilityOptions) {
         if (typeof maxDurability === "number" && maxDurability <= 0) {throw new RangeError("Error in Durability constructor: 'maxDurability' must be a number greater than 0.");}
         this.maxDurability = Math.round(maxDurability);
 
         if (options) {
             if (typeof options.canBreak === 'boolean') {this.canBreak = options.canBreak;}
+            if (typeof options.canShatter === 'boolean') {this.canBecomeIrreparable = options.canShatter;}
             if (options.currentState) {this.state = options.currentState;}
+            if (options.currentDurability) {this._durability = this.maxDurability > options.currentDurability ? options.currentDurability : this.maxDurability;}
+            if (options.durabilityStateEvents) {this.stateEvents = options.durabilityStateEvents;}
+            for (let x of ['bypassMarginOnStateChange', 'disableAutoState', 'margins', 'shatterOnBreak']) {if (options[x]) {this[x] = options[x];}}
         } else {
             this._durability = this.maxDurability;
+        }
+
+        if (!options && !options.margins && !options.bypassMarginsOnStateChange) {
+            this.margins = {
+                healthy: Math.floor(.90 * this.maxDurability), 
+                weakened: Math.floor(.40 * this.maxDurability),
+                broken: Math.floor(.10 * this.maxDurability)
+            };
         }
     }
 
@@ -57,6 +72,21 @@ export class Durability {
         return this;
     };
 
+    public setMargins(margins: DurabilityMargins): Durability {
+        this.margins = margins;
+        return this;
+    }
+
+    public setStateEvents(stateEvents: DurabilityStateEvents): Durability {
+        this.stateEvents = stateEvents;
+        return this;
+    }
+
+    public setOnStateChange(onStateChange: Function): Durability {
+        this.stateEvents.onStateChange = onStateChange;
+        return this;
+    }
+
 
     private checkState(doesThrow?: boolean): Durability {
         if (this.state === "irreparable" && !this.canBecomeIrreparable) {
@@ -70,17 +100,28 @@ export class Durability {
         return this;
     };
 
-    private checkDurability(doesThrow?: boolean): Durability {
+    private checkDurability(): Durability {
+        if (this.margins.healthy < this.durability) {this.heal(false, this.durability);}
+        else if (this.margins.healthy >= this.durability) {this.weaken(false, this.durability);}
+        else if (this.canBreak && this.margins.weakened >= this.durability) {this.break(false, this.durability);}
+        else if (this.canBecomeIrreparable && this.margins.broken >= this.durability) {this.shatter(false, this.durability);}
+
         return this;
     };
 
+    private handleStateChange(state: DurabilityState): StateChangeReturn {
+        return this.stateEvents.onStateChangeWrapper(state, this);
+    }
 
-    set state(state: durabilityState) {
+
+    set state(state: DurabilityState) {
         this._brokenState = state;
+        this.handleStateChange(this._brokenState);
     };
 
     set durability(durability: number) {
         this.checkState();
+        if (!this.disableAutoState) {this.checkDurability();}
         this._durability = durability;
     };
 
@@ -89,7 +130,7 @@ export class Durability {
         return this._durability;
     };
 
-    get state(): durabilityState {
+    get state(): DurabilityState {
         return this._brokenState;
     };
 
@@ -109,25 +150,29 @@ export class Durability {
 
     get canShatter(): boolean {return this.canBecomeIrreparable;};
 
-    get rawStateEvents(): DurabilityStateEvents {return this._stateEvents;};
+
+
+    public static validStates: Array<string> = ['healthy', 'weakened', 'broken', 'irreparable'];
 }
 
 
 
-type durabilityState = "healthy" | "weakened" | "broken" | "irreparable";
+export type DurabilityState = "healthy" | "weakened" | "broken" | "irreparable";
 
-interface durabilityMargins {
+interface DurabilityMargins {
     healthy?: number,
     weakened?: number,
     broken?: number
 }
 
-interface durabilityOptions {
+interface DurabilityOptions {
     canBreak?: boolean,
-    canBecomeIrreparable?: boolean,
-    margins?: durabilityMargins,
+    canShatter?: boolean,
+    margins?: DurabilityMargins,
     currentDurability?: number,
-    currentState?: durabilityState,
+    currentState?: DurabilityState,
     shatterOnBreak?: boolean,
-    durabilityStateEvents?: DurabilityStateEvents
+    durabilityStateEvents?: DurabilityStateEvents,
+    bypassMarginsOnStateChange?: boolean,
+    disableAutoState?: boolean
 }
