@@ -1,96 +1,24 @@
-import {DamageHandler} from "..";
-import {AttackModifierManager} from "../manager/modifier/attackmodifier";
+import {Damage} from "./damage";
+import {Player} from "../char/player";
 
 export class Attack {
 
     name: string;
-    id: string;
-
-    meta: AttackMeta;
-    damage: DamageHandler;
-    extra: AttackExtra;
-
-    modifiers: AttackModifierManager;
+    damage: Damage
 
 
-
-    constructor(name: string, damage: DamageHandler, options?: AttackOptions) {
+    constructor(name: string, damage: number | Damage) {
         this.name = name;
-        this.damage = damage;
-
-        options = options && Object.keys(options).length ? options : {};
-        this.meta = options.meta || null;
-        this.modifiers = options.modifiers || null;
-        this.id = options.id || '';
-        this.extra = options.extra || null;
-    };
+        this.damage = typeof damage === 'number' ? new Damage(damage) : damage;
+    }
 
 
 
-    public setModifiers(newMods: AttackModifierManager): Attack {
-        this.modifiers = newMods;
+    public attack(target: Player, damage?: number | Damage): Attack {
+        damage = damage || this.damage;
+        if (typeof damage === 'number') {damage = new Damage(damage);}
+        target.takeDamage(damage.baseDamage);
         return this;
-    };
-
-    public setMeta(newMeta: AttackMeta): Attack {
-        this.meta = newMeta;
-        return this;
-    };
-
-    public setName(newName: string): Attack {
-        this.name = newName;
-        return this;
-    };
-
-
-
-    static get presets(): AttackPresets {
-        return {
-            shortSword: {
-                stab: new Attack('Stab', new DamageHandler(8), {
-                    meta: {
-                        author: "WubzyGD",
-                        description: "A simple stab attack; lunge at the enemy and pierce them directly with your sword.",
-                        rarity: "Common"
-                    }, id: "shortSword-stab"/*, extra: {attackType: blah}*/
-                })
-            }
-        }
-    };
+    }
 
 }
-
-interface AttackMeta {
-    author?: string,
-    description?: string,
-    useText?: string,
-    rarity?: string | number
-    custom?: object
-}
-
-interface AttackOptions {
-    meta?: AttackMeta,
-    modifiers?: AttackModifierManager,
-    id?: string,
-    extra?: AttackExtra
-}
-
-interface AttackExtra {
-    attackType?: AttackType //TODO add AttackType class
-}
-
-interface AttackPresets {
-    shortSword: {
-        stab: Attack}/*,
-        slice: Attack,
-        combo: Attack
-    },
-    longSword: {
-        stab: Attack,
-        slice: Attack,
-        combo: Attack
-    }*/
-}
-
-
-let example = Attack.presets.shortSword.stab;

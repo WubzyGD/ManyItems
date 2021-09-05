@@ -2,11 +2,14 @@
   "name": "manyitems",
   "version": "2.0.0",
   "description": "A simple and intuitive item-creator",
-  "author": "WubzyGD#8766",
+  "author": "wubzygd",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "tsc",
+    "test": "node test.js",
+    "testnc": "node test.js",
+    "pretest": "tsc"
   },
   "keywords": [
     "rpg",
@@ -15,8 +18,5 @@
   ],
   "license": "ISC",
   "displayName": "ManyItems",
-  "respository": "https://github.com/Crescent-Shadow-Studios/ManyItems",
-  "dependencies": {
-    "typescript": "^3.9.7"
-  }
+  "respository": "https://github.com/WubzyGD/ManyItems"
 }
