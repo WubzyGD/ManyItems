@@ -7,6 +7,9 @@ export class EffectManager<EffectInstance extends Effect> {
     all: Map<string, EffectInstance> = new Map();
     effects: Map<string, ManagedEffect<EffectInstance> | ModifiableManagedEffect<EffectInstance>> = new Map();
 
+    private _onUpdate: (effect: EffectInstance, manager: EffectManager<EffectInstance>) => any = () => {};
+    private _onEffectUpdate: (effect: ManagedEffect<EffectInstance> | ModifiableManagedEffect<EffectInstance>, manager: EffectManager<EffectInstance>) => any = () => {};
+
 
     constructor(effects?: EffectInstance[]) {
         if (effects) {effects.forEach(effect => this.add(effect));}
@@ -18,11 +21,22 @@ export class EffectManager<EffectInstance extends Effect> {
         if (asModifiable === true) {this.effects.set(effect.name, new ModifiableManagedEffect(effect, [effect.name]));}
         else {this.effects.set(effect.name, new ManagedEffect(effect));}
         this.all.set(effect.name, effect);
+        this._onUpdate(effect, this);
         return this;
     }
 
     public addMult(effects: EffectInstance[], asModifiable?: boolean): EffectManager<EffectInstance> {
         effects.forEach(effect => this.add(effect, asModifiable));
+        return this;
+    }
+
+    public setUpdateEvent(updateEvent: (effect: EffectInstance, manager: EffectManager<EffectInstance>) => any): EffectManager<EffectInstance> {
+        this._onUpdate = updateEvent;
+        return this;
+    }
+
+    public setEffectUpdateEvent(updateEvent: (effect: ManagedEffect<EffectInstance> | ModifiableManagedEffect<EffectInstance>, manager: EffectManager<EffectInstance>) => any): EffectManager<EffectInstance> {
+        this._onEffectUpdate = updateEvent;
         return this;
     }
 
@@ -72,6 +86,8 @@ export class ManagedEffect<EffectInstance extends Effect> {
     effect: EffectInstance;
     count: number;
 
+    private _onCountUpdate: (effect: EffectInstance, count: number) => any = () => {};
+
 
     constructor(effect: EffectInstance, count?: number) {
         this.effect = effect;
@@ -82,21 +98,27 @@ export class ManagedEffect<EffectInstance extends Effect> {
 
     public setCount(count: number): ManagedEffect<EffectInstance> {
         this.count = count;
+        this._onCountUpdate(this.effect, count);
         return this;
     }
 
     public addOne(): ManagedEffect<EffectInstance> {
-        this.count++;
+        this.setCount(this.count + 1);
         return this;
     }
 
     public removeOne(): ManagedEffect<EffectInstance> {
-        this.count--;
+        this.setCount(this.count - 1);
         return this;
     }
 
     public makeModifiable(names?: string[]): ModifiableManagedEffect<EffectInstance> {
         return new ModifiableManagedEffect(this.effect, names, this.count);
+    }
+
+    public setUpdateEvent(updateEvent: (effect: EffectInstance, count: number) => any): ManagedEffect<EffectInstance> {
+        this._onCountUpdate = updateEvent;
+        return this;
     }
 
 }
@@ -107,6 +129,8 @@ export class ModifiableManagedEffect<EffectInstance extends Effect> {
     effect: EffectInstance;
     count: number;
     silentRetrievalError: boolean = false;
+    
+    private _onCountUpdate: (effect: EffectInstance, count: number) => any = () => {};
 
 
     constructor(effect: EffectInstance, names: string[], count?: number) {

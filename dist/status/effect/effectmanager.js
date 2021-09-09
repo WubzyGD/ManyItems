@@ -7,6 +7,8 @@ class EffectManager {
     constructor(effects) {
         this.all = new Map();
         this.effects = new Map();
+        this._onUpdate = () => { };
+        this._onEffectUpdate = () => { };
         if (effects) {
             effects.forEach(effect => this.add(effect));
         }
@@ -19,10 +21,19 @@ class EffectManager {
             this.effects.set(effect.name, new ManagedEffect(effect));
         }
         this.all.set(effect.name, effect);
+        this._onUpdate(effect, this);
         return this;
     }
     addMult(effects, asModifiable) {
         effects.forEach(effect => this.add(effect, asModifiable));
+        return this;
+    }
+    setUpdateEvent(updateEvent) {
+        this._onUpdate = updateEvent;
+        return this;
+    }
+    setEffectUpdateEvent(updateEvent) {
+        this._onEffectUpdate = updateEvent;
         return this;
     }
     static Player(effects) { return new EffectManager(effects); }
@@ -64,23 +75,29 @@ class UnmodifiableEffectManager extends EffectManager {
 exports.UnmodifiableEffectManager = UnmodifiableEffectManager;
 class ManagedEffect {
     constructor(effect, count) {
+        this._onCountUpdate = () => { };
         this.effect = effect;
         this.count = typeof count === 'number' ? count : 1;
     }
     setCount(count) {
         this.count = count;
+        this._onCountUpdate(this.effect, count);
         return this;
     }
     addOne() {
-        this.count++;
+        this.setCount(this.count + 1);
         return this;
     }
     removeOne() {
-        this.count--;
+        this.setCount(this.count - 1);
         return this;
     }
     makeModifiable(names) {
         return new ModifiableManagedEffect(this.effect, names, this.count);
+    }
+    setUpdateEvent(updateEvent) {
+        this._onCountUpdate = updateEvent;
+        return this;
     }
 }
 exports.ManagedEffect = ManagedEffect;
@@ -88,6 +105,7 @@ class ModifiableManagedEffect {
     constructor(effect, names, count) {
         this.custom = new Map();
         this.silentRetrievalError = false;
+        this._onCountUpdate = () => { };
         this.effect = effect;
         this.count = typeof count === 'number' ? count : 1;
         if (names.length < this.count) {
