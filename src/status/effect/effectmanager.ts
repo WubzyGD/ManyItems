@@ -1,200 +1,153 @@
+import {EventEmitter} from 'tsee';
+import {ArrayInput} from "../../util/dev/arrayinput";
 import {Effect} from "./effect";
-import {ConstructorError, ValueError} from "../../util/errors/util";
-import {PlayerEffect} from "./player/playereffect";
+import {ValueError} from "../../util/dev/errors/util";
 
-export class EffectManager<EffectInstance extends Effect> {
-
-    all: Map<string, EffectInstance> = new Map();
-    effects: Map<string, ManagedEffect<EffectInstance> | ModifiableManagedEffect<EffectInstance>> = new Map();
-
-    private _onUpdate: (effect: EffectInstance, manager: EffectManager<EffectInstance>) => any = () => {};
-    private _onEffectUpdate: (effect: ManagedEffect<EffectInstance> | ModifiableManagedEffect<EffectInstance>, manager: EffectManager<EffectInstance>) => any = () => {};
+const structuredClone = require('realistic-structured-clone');
 
 
-    constructor(effects?: EffectInstance[]) {
+export class EffectManager<EffectType extends Effect> extends EventEmitter<EffectManagerEvents<EffectType>> {
+
+    defaultCountUpdateEvent: (effect: ManagedEffect<EffectType>) => void;
+
+    private effects: Map<string, ManagedEffect<EffectType>> = new Map();
+
+
+    constructor(effects?: EffectType[]) {
+        super();
         if (effects) {effects.forEach(effect => this.add(effect));}
     }
 
 
 
-    public add(effect: EffectInstance, asModifiable?: boolean): EffectManager<EffectInstance> {
-        if (asModifiable === true) {this.effects.set(effect.name, new ModifiableManagedEffect(effect, [effect.name]));}
-        else {this.effects.set(effect.name, new ManagedEffect(effect));}
-        this.all.set(effect.name, effect);
-        this._onUpdate(effect, this);
+    public add(...effects: EffectType[]): EffectManager<EffectType> {
+        ArrayInput.makeArray<EffectType>(effects).forEach((effect: EffectType) => {
+            if (this.effects.has(effect.name)) {
+                this.effects.get(effect.name).addOne();
+            } else {
+                const managedEffect = new ManagedEffect<EffectType>(effect);
+                if (this.defaultCountUpdateEvent) {managedEffect.on("countUpdate", this.defaultCountUpdateEvent);}
+                this.effects.set(effect.name, managedEffect);
+                this.emit('add', managedEffect);
+            }
+        });
         return this;
     }
 
-    public addMult(effects: EffectInstance[], asModifiable?: boolean): EffectManager<EffectInstance> {
-        effects.forEach(effect => this.add(effect, asModifiable));
+    public addMult(effects: EffectType[]): EffectManager<EffectType> {
+        effects.forEach(effect => this.add(effect));
         return this;
     }
 
-    public setUpdateEvent(updateEvent: (effect: EffectInstance, manager: EffectManager<EffectInstance>) => any): EffectManager<EffectInstance> {
-        this._onUpdate = updateEvent;
+    public get(effectName: string): ManagedEffect<EffectType> {
+        return this.effects.get(effectName);
+    }
+
+    public remove(effectName: string | ManagedEffect<EffectType> | EffectType): EffectManager<EffectType> {
+        effectName = effectName instanceof ManagedEffect ? effectName.effect.name : typeof effectName === 'string' ? effectName : effectName.name;
+        if (!this.effects.has(effectName)) {throw new ValueError(`EffectManagerValueError: "${effectName}" is not a valid effect name in this effect manager's managed effects.`);}
+        let toDelete = this.effects.get(effectName);
+        this.effects.delete(effectName);
+        this.emit('remove', toDelete);
         return this;
     }
 
-    public setEffectUpdateEvent(updateEvent: (effect: ManagedEffect<EffectInstance> | ModifiableManagedEffect<EffectInstance>, manager: EffectManager<EffectInstance>) => any): EffectManager<EffectInstance> {
-        this._onEffectUpdate = updateEvent;
+    public replace(effect: ManagedEffect<EffectType> | EffectType): EffectManager<EffectType> {
+        let tr = effect instanceof ManagedEffect ? effect : new ManagedEffect<EffectType>(effect);
+        if (!this.effects.has(tr.effect.name)) {return this.add(tr.effect);}
+        this.remove(tr);
+        this.add(tr.effect);
+        return this;
+    }
+
+    public getEffects(): Map<string, ManagedEffect<EffectType>> {
+        let nm = new Map();
+        Array.from(this.effects.keys()).forEach(e => nm.set(e, this.effects.get(e)));
+        return structuredClone(this.effects);
+    }
+
+    public setDefaultCountUpdateEvent(eventHandler: (effect: ManagedEffect<EffectType>) => void): EffectManager<EffectType> {
+        this.defaultCountUpdateEvent = eventHandler;
         return this;
     }
 
 
-    public static Player(effects?: PlayerEffect[]): EffectManager<PlayerEffect> {return new EffectManager<PlayerEffect>(effects);}
+    get staticEffects(): Map<string, ManagedEffect<EffectType>> {
+        return this.getEffects();
+    }
 
 }
 
-export class ModifiableEffectManager<EffectInstance extends Effect> extends EffectManager<EffectInstance> {
-    effects: Map<string, ModifiableManagedEffect<EffectInstance>>;
-    constructor(effects?: EffectInstance[]) {
-        super(effects);
-    }
-    public add(effect: EffectInstance, asModifiable?: boolean): ModifiableEffectManager<EffectInstance> {
-        asModifiable = true;
-        super.add(effect, asModifiable);
-        return this;
-    }
-    public addMult(effects: EffectInstance[], asModifiable?: boolean): ModifiableEffectManager<EffectInstance> {
-        asModifiable = true;
-        super.addMult(effects, asModifiable);
-        return this;
-    }
-    public static Player(effects?: PlayerEffect[]): ModifiableEffectManager<PlayerEffect> {return new ModifiableEffectManager<PlayerEffect>(effects);}
-}
 
-export class UnmodifiableEffectManager<EffectInstance extends Effect> extends EffectManager<EffectInstance> {
-    effects: Map<string, ManagedEffect<EffectInstance>>;
-    constructor(effects?: EffectInstance[]) {
-        super(effects);
-    }
-    public add(effect: EffectInstance, asModifiable?: boolean): UnmodifiableEffectManager<EffectInstance> {
-        asModifiable = false;
-        super.add(effect, asModifiable);
-        return this;
-    }
-    public addMult(effects: EffectInstance[], asModifiable?: boolean): UnmodifiableEffectManager<EffectInstance> {
-        asModifiable = false;
-        super.addMult(effects, asModifiable);
-        return this;
-    }
-    public static Player(effects?: PlayerEffect[]): UnmodifiableEffectManager<PlayerEffect> {return new UnmodifiableEffectManager<PlayerEffect>(effects);}
-}
+export class ManagedEffect<EffectType extends Effect> extends EventEmitter<ManagedEffectEvents<EffectType>> {
 
-export class ManagedEffect<EffectInstance extends Effect> {
+    effect: EffectType;
 
-    effect: EffectInstance;
-    count: number;
-
-    private _onCountUpdate: (effect: EffectInstance, count: number) => any = () => {};
+    private _count: number = 1;
 
 
-    constructor(effect: EffectInstance, count?: number) {
+    constructor(effect: EffectType, count?: number) {
+        super();
         this.effect = effect;
-        this.count = typeof count === 'number' ? count : 1;
-    }
+        this._count = count || this._count;
+    };
 
 
 
-    public setCount(count: number): ManagedEffect<EffectInstance> {
+    public setCount(count: number): ManagedEffect<EffectType> {
         this.count = count;
-        this._onCountUpdate(this.effect, count);
         return this;
-    }
+    };
 
-    public addOne(): ManagedEffect<EffectInstance> {
-        this.setCount(this.count + 1);
+    public add(count: number): ManagedEffect<EffectType> {
+        this.count += count;
         return this;
-    }
+    };
 
-    public removeOne(): ManagedEffect<EffectInstance> {
-        this.setCount(this.count - 1);
+    public addOne(): ManagedEffect<EffectType> {
+        this.count += 1;
         return this;
-    }
+    };
 
-    public makeModifiable(names?: string[]): ModifiableManagedEffect<EffectInstance> {
-        return new ModifiableManagedEffect(this.effect, names, this.count);
-    }
-
-    public setUpdateEvent(updateEvent: (effect: EffectInstance, count: number) => any): ManagedEffect<EffectInstance> {
-        this._onCountUpdate = updateEvent;
+    public remove(count: number): ManagedEffect<EffectType> {
+        this.count -= count;
         return this;
-    }
+    };
 
-}
+    public removeOne(count: number): ManagedEffect<EffectType> {
+        this.count -= 1;
+        return this;
+    };
 
-export class ModifiableManagedEffect<EffectInstance extends Effect> {
-
-    custom: Map<string, EffectInstance> = new Map();
-    effect: EffectInstance;
-    count: number;
-    silentRetrievalError: boolean = false;
-    
-    private _onCountUpdate: (effect: EffectInstance, count: number) => any = () => {};
+    public removeAll(count: number): ManagedEffect<EffectType> {
+        this.count = 0;
+        return this;
+    };
 
 
-    constructor(effect: EffectInstance, names: string[], count?: number) {
-        this.effect = effect;
-        this.count = typeof count === 'number' ? count : 1;
-        if (names.length < this.count) {throw new ConstructorError(`ModifiableManagedEffect: class was not instantiated with enough identifier names to match property 'count'. (${names.length} != ${count})`);}
-        let altEffect = Object.assign(Object.create(Object.getPrototypeOf(effect)), effect);
-        let name; for (name of names) {
-            this.custom.set(name, altEffect);
+    get count(): number {
+        return this._count;
+    };
+
+    set count(count: number) {
+        this._count = count;
+        this.emit('countUpdate', this);
+        if (this._count <= 0) {
+            this._count = 0;
+            this.emit('depleted', this);
         }
     }
 
+}
 
 
-    public addOne(name: string): ModifiableManagedEffect<EffectInstance> {
-        this.custom.set(name, this.effect);
-        this.count++;
-        return this;
-    }
 
-    public addMult(names: string[]): ModifiableManagedEffect<EffectInstance> {
-        names.forEach(name => {
-            this.custom.set(name, this.effect);
-            this.count++
-        });
-        return this;
-    }
+export type EffectManagerEvents<EffectType extends Effect> = {
+    'add': (effect: ManagedEffect<EffectType>) => void,
+    'remove': (effect: ManagedEffect<EffectType>) => void
+}
 
-    public removeOne(name?: string): ModifiableManagedEffect<EffectInstance> {
-        let effect = name || this.custom.get(Array.from(this.custom.keys())[0]).name;
-        if (!this.custom.get(effect) && !this.silentRetrievalError) {throw new ValueError(`This ModifiableManagedEffect instance has no custom Effects that match the sub-name ${effect}`);}
-        this.custom.delete(effect);
-        this.count--;
-        return this;
-    }
-
-    public removeMult(names: string[]): ModifiableManagedEffect<EffectInstance> {
-        names.forEach(effect => {
-            if (!this.custom.get(effect) && !this.silentRetrievalError) {throw new ValueError(`This ModifiableManagedEffect instance has no custom Effects that match the sub-name ${effect}`);}
-            this.custom.delete(effect);
-            this.count--;
-        });
-        return this;
-    }
-
-    public modify(toModify: string, newEffect: EffectInstance): ModifiableManagedEffect<EffectInstance> {
-        if (newEffect !instanceof Effect) {return this;}
-        this.custom.set(toModify, newEffect);
-        return this;
-    }
-
-    public rename(old: string, renamed: string): ModifiableManagedEffect<EffectInstance> {
-        let effect = this.custom.get(old);
-        if (!effect && !this.silentRetrievalError) {throw new ValueError(`This ModifiableManagedEffect instance has no custom Effects that match the sub-name ${old}`);}
-        effect.name = renamed;
-        this.custom.delete(old);
-        this.custom.set(renamed, effect);
-        this.effect.name = old;
-        return this;
-    }
-
-    public silence(): ModifiableManagedEffect<EffectInstance> {
-        this.silentRetrievalError = true;
-        return this;
-    }
-
+export type ManagedEffectEvents<EffectType extends Effect> = {
+    'countUpdate': (effect: ManagedEffect<EffectType>) => void,
+    'depleted': (effect: ManagedEffect<EffectType>) => void
 }

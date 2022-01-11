@@ -7,8 +7,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "compile": "tsc",
-    "test": "node test.js",
-    "testnc": "node test.js",
+    "test": "node main.test.js",
+    "testnc": "node main.test.js",
     "pretest": "tsc"
   },
   "keywords": [
@@ -18,5 +18,10 @@
   ],
   "license": "ISC",
   "displayName": "ManyItems",
-  "respository": "https://github.com/WubzyGD/ManyItems"
+  "respository": "https://github.com/WubzyGD/ManyItems",
+  "dependencies": {
+    "@types/node": "^17.0.8",
+    "realistic-structured-clone": "^2.0.3",
+    "tsee": "^1.3.2"
+  }
 }

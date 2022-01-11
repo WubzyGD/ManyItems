@@ -14,4 +14,4 @@ export {Item} from './item/item';
 export {Durability} from './item/durability';
 export {DurabilityStateEvents} from './item/durabilitystateevents';
 export {Effect} from './status/effect/effect';
-export {EffectManager, ModifiableEffectManager, ModifiableManagedEffect, UnmodifiableEffectManager, ManagedEffect} from './status/effect/effectmanager';
+export {EffectManager, ManagedEffect} from './status/effect/effectmanager';

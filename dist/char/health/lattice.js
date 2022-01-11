@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Lattice = void 0;
-const util_1 = require("../../util/errors/util");
-const char_1 = require("../../util/errors/char");
+const util_1 = require("../../util/dev/errors/util");
+const char_1 = require("../../util/dev/errors/char");
 class Lattice {
     constructor(hp, hpSpill, enabled) {
         this.enabled = false;

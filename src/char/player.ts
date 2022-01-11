@@ -3,13 +3,12 @@ import {HealthManager} from "./health/healthmanager";
 import {Race} from "./modifiers/race";
 import {PlayerEffect} from "../status/effect/player/playereffect";
 import {HealthEffect} from "../status/effect/player/healtheffect";
-import {ModifiableEffectManager} from "../status/effect/effectmanager";
 
 export class Player extends Char {
 
     hp: HealthManager;
     race: Race;
-    effects: ModifiableEffectManager<PlayerEffect> = new ModifiableEffectManager<PlayerEffect>();
+    //effects: ModifiableEffectManager<PlayerEffect> = new ModifiableEffectManager<PlayerEffect>();
 
     private _HPMods: Map<string, HealthEffect> = new Map();
 
@@ -38,12 +37,12 @@ export class Player extends Char {
     }
 
     public addEffect(effect: PlayerEffect): Player {
-        this.effects.add(effect);
+        //this.effects.add(effect);
         return this;
     }
 
     public removeEffect(effect: PlayerEffect | string): Player {
-        this.effects.effects.delete(effect instanceof PlayerEffect ? effect.name : effect);
+        //this.effects.effects.delete(effect instanceof PlayerEffect ? effect.name : effect);
         return this;
     }
 

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HealthManager = void 0;
-const char_1 = require("../../util/errors/char");
+const char_1 = require("../../util/dev/errors/char");
 const lattice_1 = require("./lattice");
 class HealthManager {
     constructor(health, options) {

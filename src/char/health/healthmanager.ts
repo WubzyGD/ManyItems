@@ -1,4 +1,4 @@
-import {HealthManagerConstructorError, HealthManagerError} from "../../util/errors/char";
+import {HealthManagerConstructorError} from "../../util/dev/errors/char";
 import {Lattice} from "./lattice";
 
 export class HealthManager {

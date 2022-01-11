@@ -1,5 +1,5 @@
-import {ConstructorError} from "../../util/errors/util";
-import {HealthManagerError} from "../../util/errors/char";
+import {ConstructorError} from "../../util/dev/errors/util";
+import {HealthManagerError} from "../../util/dev/errors/char";
 
 export class Lattice {
 

@@ -1,174 +1,108 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ModifiableManagedEffect = exports.ManagedEffect = exports.UnmodifiableEffectManager = exports.ModifiableEffectManager = exports.EffectManager = void 0;
-const effect_1 = require("./effect");
-const util_1 = require("../../util/errors/util");
-class EffectManager {
+exports.ManagedEffect = exports.EffectManager = void 0;
+const tsee_1 = require("tsee");
+const arrayinput_1 = require("../../util/dev/arrayinput");
+const util_1 = require("../../util/dev/errors/util");
+const structuredClone = require('realistic-structured-clone');
+class EffectManager extends tsee_1.EventEmitter {
     constructor(effects) {
-        this.all = new Map();
+        super();
         this.effects = new Map();
-        this._onUpdate = () => { };
-        this._onEffectUpdate = () => { };
         if (effects) {
             effects.forEach(effect => this.add(effect));
         }
     }
-    add(effect, asModifiable) {
-        if (asModifiable === true) {
-            this.effects.set(effect.name, new ModifiableManagedEffect(effect, [effect.name]));
+    add(...effects) {
+        arrayinput_1.ArrayInput.makeArray(effects).forEach((effect) => {
+            const managedEffect = new ManagedEffect(effect);
+            if (this.defaultCountUpdateEvent) {
+                managedEffect.on("countUpdate", this.defaultCountUpdateEvent);
+            }
+            this.effects.set(effect.name, managedEffect);
+            this.emit('add', managedEffect);
+        });
+        return this;
+    }
+    addMult(effects) {
+        effects.forEach(effect => this.add(effect));
+        return this;
+    }
+    get(effectName) {
+        return this.effects.get(effectName);
+    }
+    remove(effectName) {
+        if (!this.effects.has(effectName)) {
+            throw new util_1.ValueError(`EffectManagerValueError: "${effectName}" is not a valid effect name in this effect manager's managed effects.`);
         }
-        else {
-            this.effects.set(effect.name, new ManagedEffect(effect));
-        }
-        this.all.set(effect.name, effect);
-        this._onUpdate(effect, this);
+        let toDelete = this.effects.get(effectName);
+        this.effects.delete(effectName);
+        this.emit('remove', toDelete);
         return this;
     }
-    addMult(effects, asModifiable) {
-        effects.forEach(effect => this.add(effect, asModifiable));
+    getEffects() {
+        let nm = new Map();
+        Array.from(this.effects.keys()).forEach(e => nm.set(e, this.effects.get(e)));
+        return structuredClone(this.effects);
+    }
+    setDefaultCountUpdateEvent(eventHandler) {
+        this.defaultCountUpdateEvent = eventHandler;
         return this;
     }
-    setUpdateEvent(updateEvent) {
-        this._onUpdate = updateEvent;
-        return this;
+    get staticEffects() {
+        return this.getEffects();
     }
-    setEffectUpdateEvent(updateEvent) {
-        this._onEffectUpdate = updateEvent;
-        return this;
-    }
-    static Player(effects) { return new EffectManager(effects); }
 }
 exports.EffectManager = EffectManager;
-class ModifiableEffectManager extends EffectManager {
-    constructor(effects) {
-        super(effects);
-    }
-    add(effect, asModifiable) {
-        asModifiable = true;
-        super.add(effect, asModifiable);
-        return this;
-    }
-    addMult(effects, asModifiable) {
-        asModifiable = true;
-        super.addMult(effects, asModifiable);
-        return this;
-    }
-    static Player(effects) { return new ModifiableEffectManager(effects); }
-}
-exports.ModifiableEffectManager = ModifiableEffectManager;
-class UnmodifiableEffectManager extends EffectManager {
-    constructor(effects) {
-        super(effects);
-    }
-    add(effect, asModifiable) {
-        asModifiable = false;
-        super.add(effect, asModifiable);
-        return this;
-    }
-    addMult(effects, asModifiable) {
-        asModifiable = false;
-        super.addMult(effects, asModifiable);
-        return this;
-    }
-    static Player(effects) { return new UnmodifiableEffectManager(effects); }
-}
-exports.UnmodifiableEffectManager = UnmodifiableEffectManager;
-class ManagedEffect {
+class ManagedEffect extends tsee_1.EventEmitter {
     constructor(effect, count) {
-        this._onCountUpdate = () => { };
+        super();
+        this._count = 1;
         this.effect = effect;
-        this.count = typeof count === 'number' ? count : 1;
+        this._count = count || this._count;
     }
+    ;
     setCount(count) {
         this.count = count;
-        this._onCountUpdate(this.effect, count);
         return this;
     }
+    ;
+    add(count) {
+        this.count += count;
+        return this;
+    }
+    ;
     addOne() {
-        this.setCount(this.count + 1);
+        this.count += 1;
         return this;
     }
-    removeOne() {
-        this.setCount(this.count - 1);
+    ;
+    remove(count) {
+        this.count -= count;
         return this;
     }
-    makeModifiable(names) {
-        return new ModifiableManagedEffect(this.effect, names, this.count);
-    }
-    setUpdateEvent(updateEvent) {
-        this._onCountUpdate = updateEvent;
+    ;
+    removeOne(count) {
+        this.count -= 1;
         return this;
+    }
+    ;
+    removeAll(count) {
+        this.count = 0;
+        return this;
+    }
+    ;
+    get count() {
+        return this._count;
+    }
+    ;
+    set count(count) {
+        this._count = count;
+        this.emit('countUpdate', this);
+        if (this._count <= 0) {
+            this._count = 0;
+            this.emit('depleted', this);
+        }
     }
 }
 exports.ManagedEffect = ManagedEffect;
-class ModifiableManagedEffect {
-    constructor(effect, names, count) {
-        this.custom = new Map();
-        this.silentRetrievalError = false;
-        this._onCountUpdate = () => { };
-        this.effect = effect;
-        this.count = typeof count === 'number' ? count : 1;
-        if (names.length < this.count) {
-            throw new util_1.ConstructorError(`ModifiableManagedEffect: class was not instantiated with enough identifier names to match property 'count'. (${names.length} != ${count})`);
-        }
-        let altEffect = Object.assign(Object.create(Object.getPrototypeOf(effect)), effect);
-        let name;
-        for (name of names) {
-            this.custom.set(name, altEffect);
-        }
-    }
-    addOne(name) {
-        this.custom.set(name, this.effect);
-        this.count++;
-        return this;
-    }
-    addMult(names) {
-        names.forEach(name => {
-            this.custom.set(name, this.effect);
-            this.count++;
-        });
-        return this;
-    }
-    removeOne(name) {
-        let effect = name || this.custom.get(Array.from(this.custom.keys())[0]).name;
-        if (!this.custom.get(effect) && !this.silentRetrievalError) {
-            throw new util_1.ValueError(`This ModifiableManagedEffect instance has no custom Effects that match the sub-name ${effect}`);
-        }
-        this.custom.delete(effect);
-        this.count--;
-        return this;
-    }
-    removeMult(names) {
-        names.forEach(effect => {
-            if (!this.custom.get(effect) && !this.silentRetrievalError) {
-                throw new util_1.ValueError(`This ModifiableManagedEffect instance has no custom Effects that match the sub-name ${effect}`);
-            }
-            this.custom.delete(effect);
-            this.count--;
-        });
-        return this;
-    }
-    modify(toModify, newEffect) {
-        if (newEffect instanceof effect_1.Effect) {
-            return this;
-        }
-        this.custom.set(toModify, newEffect);
-        return this;
-    }
-    rename(old, renamed) {
-        let effect = this.custom.get(old);
-        if (!effect && !this.silentRetrievalError) {
-            throw new util_1.ValueError(`This ModifiableManagedEffect instance has no custom Effects that match the sub-name ${old}`);
-        }
-        effect.name = renamed;
-        this.custom.delete(old);
-        this.custom.set(renamed, effect);
-        this.effect.name = old;
-        return this;
-    }
-    silence() {
-        this.silentRetrievalError = true;
-        return this;
-    }
-}
-exports.ModifiableManagedEffect = ModifiableManagedEffect;

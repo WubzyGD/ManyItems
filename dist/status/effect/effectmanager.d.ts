@@ -1,54 +1,35 @@
+import { EventEmitter } from 'tsee';
 import { Effect } from "./effect";
-import { PlayerEffect } from "./player/playereffect";
-export declare class EffectManager<EffectInstance extends Effect> {
-    all: Map<string, EffectInstance>;
-    effects: Map<string, ManagedEffect<EffectInstance> | ModifiableManagedEffect<EffectInstance>>;
-    private _onUpdate;
-    private _onEffectUpdate;
-    constructor(effects?: EffectInstance[]);
-    add(effect: EffectInstance, asModifiable?: boolean): EffectManager<EffectInstance>;
-    addMult(effects: EffectInstance[], asModifiable?: boolean): EffectManager<EffectInstance>;
-    setUpdateEvent(updateEvent: (effect: EffectInstance, manager: EffectManager<EffectInstance>) => any): EffectManager<EffectInstance>;
-    setEffectUpdateEvent(updateEvent: (effect: ManagedEffect<EffectInstance> | ModifiableManagedEffect<EffectInstance>, manager: EffectManager<EffectInstance>) => any): EffectManager<EffectInstance>;
-    static Player(effects?: PlayerEffect[]): EffectManager<PlayerEffect>;
+export declare class EffectManager<EffectType extends Effect> extends EventEmitter<EffectManagerEvents<EffectType>> {
+    defaultCountUpdateEvent: (effect: ManagedEffect<EffectType>) => void;
+    private effects;
+    constructor(effects?: EffectType[]);
+    add(...effects: EffectType[]): EffectManager<EffectType>;
+    addMult(effects: EffectType[]): EffectManager<EffectType>;
+    get(effectName: string): ManagedEffect<EffectType>;
+    remove(effectName: string): EffectManager<EffectType>;
+    getEffects(): Map<string, ManagedEffect<EffectType>>;
+    setDefaultCountUpdateEvent(eventHandler: (effect: ManagedEffect<EffectType>) => void): EffectManager<EffectType>;
+    get staticEffects(): Map<string, ManagedEffect<EffectType>>;
 }
-export declare class ModifiableEffectManager<EffectInstance extends Effect> extends EffectManager<EffectInstance> {
-    effects: Map<string, ModifiableManagedEffect<EffectInstance>>;
-    constructor(effects?: EffectInstance[]);
-    add(effect: EffectInstance, asModifiable?: boolean): ModifiableEffectManager<EffectInstance>;
-    addMult(effects: EffectInstance[], asModifiable?: boolean): ModifiableEffectManager<EffectInstance>;
-    static Player(effects?: PlayerEffect[]): ModifiableEffectManager<PlayerEffect>;
+export declare class ManagedEffect<EffectType extends Effect> extends EventEmitter<ManagedEffectEvents<EffectType>> {
+    effect: EffectType;
+    private _count;
+    constructor(effect: EffectType, count?: number);
+    setCount(count: number): ManagedEffect<EffectType>;
+    add(count: number): ManagedEffect<EffectType>;
+    addOne(): ManagedEffect<EffectType>;
+    remove(count: number): ManagedEffect<EffectType>;
+    removeOne(count: number): ManagedEffect<EffectType>;
+    removeAll(count: number): ManagedEffect<EffectType>;
+    get count(): number;
+    set count(count: number);
 }
-export declare class UnmodifiableEffectManager<EffectInstance extends Effect> extends EffectManager<EffectInstance> {
-    effects: Map<string, ManagedEffect<EffectInstance>>;
-    constructor(effects?: EffectInstance[]);
-    add(effect: EffectInstance, asModifiable?: boolean): UnmodifiableEffectManager<EffectInstance>;
-    addMult(effects: EffectInstance[], asModifiable?: boolean): UnmodifiableEffectManager<EffectInstance>;
-    static Player(effects?: PlayerEffect[]): UnmodifiableEffectManager<PlayerEffect>;
-}
-export declare class ManagedEffect<EffectInstance extends Effect> {
-    effect: EffectInstance;
-    count: number;
-    private _onCountUpdate;
-    constructor(effect: EffectInstance, count?: number);
-    setCount(count: number): ManagedEffect<EffectInstance>;
-    addOne(): ManagedEffect<EffectInstance>;
-    removeOne(): ManagedEffect<EffectInstance>;
-    makeModifiable(names?: string[]): ModifiableManagedEffect<EffectInstance>;
-    setUpdateEvent(updateEvent: (effect: EffectInstance, count: number) => any): ManagedEffect<EffectInstance>;
-}
-export declare class ModifiableManagedEffect<EffectInstance extends Effect> {
-    custom: Map<string, EffectInstance>;
-    effect: EffectInstance;
-    count: number;
-    silentRetrievalError: boolean;
-    private _onCountUpdate;
-    constructor(effect: EffectInstance, names: string[], count?: number);
-    addOne(name: string): ModifiableManagedEffect<EffectInstance>;
-    addMult(names: string[]): ModifiableManagedEffect<EffectInstance>;
-    removeOne(name?: string): ModifiableManagedEffect<EffectInstance>;
-    removeMult(names: string[]): ModifiableManagedEffect<EffectInstance>;
-    modify(toModify: string, newEffect: EffectInstance): ModifiableManagedEffect<EffectInstance>;
-    rename(old: string, renamed: string): ModifiableManagedEffect<EffectInstance>;
-    silence(): ModifiableManagedEffect<EffectInstance>;
-}
+export declare type EffectManagerEvents<EffectType extends Effect> = {
+    'add': (effect: ManagedEffect<EffectType>) => void;
+    'remove': (effect: ManagedEffect<EffectType>) => void;
+};
+export declare type ManagedEffectEvents<EffectType extends Effect> = {
+    'countUpdate': (effect: ManagedEffect<EffectType>) => void;
+    'depleted': (effect: ManagedEffect<EffectType>) => void;
+};

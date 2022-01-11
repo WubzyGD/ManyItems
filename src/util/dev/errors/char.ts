@@ -1,5 +1,3 @@
-import {ConstructorError} from "./util";
-
 export class HealthManagerError extends Error {
     constructor(message: string, name?: string) {
         super(message);

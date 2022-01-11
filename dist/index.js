@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ManagedEffect = exports.UnmodifiableEffectManager = exports.ModifiableManagedEffect = exports.ModifiableEffectManager = exports.EffectManager = exports.Effect = exports.Random = exports.Die = exports.Dice = exports.PlayerEffect = exports.HealthEffect = exports.Lattice = exports.HealthManager = exports.Race = exports.Damage = exports.Attack = exports.Player = exports.Char = void 0;
+exports.ManagedEffect = exports.EffectManager = exports.Effect = exports.DurabilityStateEvents = exports.Durability = exports.Item = exports.Weapon = exports.Random = exports.Die = exports.Dice = exports.PlayerEffect = exports.HealthEffect = exports.Lattice = exports.HealthManager = exports.Race = exports.Damage = exports.Attack = exports.Player = exports.Char = void 0;
 var char_1 = require("./char/char");
 Object.defineProperty(exports, "Char", { enumerable: true, get: function () { return char_1.Char; } });
 var player_1 = require("./char/player");
@@ -24,15 +24,16 @@ Object.defineProperty(exports, "Dice", { enumerable: true, get: function () { re
 Object.defineProperty(exports, "Die", { enumerable: true, get: function () { return dice_1.Die; } });
 var random_1 = require("./util/random");
 Object.defineProperty(exports, "Random", { enumerable: true, get: function () { return random_1.Random; } });
-/*export {Weapon} from './item/weapon/weapon';
-export {Item} from './item/item';
-export {Durability} from './item/durability';
-export {DurabilityStateEvents} from './item/durabilitystateevents';*/
+var weapon_1 = require("./item/weapon/weapon");
+Object.defineProperty(exports, "Weapon", { enumerable: true, get: function () { return weapon_1.Weapon; } });
+var item_1 = require("./item/item");
+Object.defineProperty(exports, "Item", { enumerable: true, get: function () { return item_1.Item; } });
+var durability_1 = require("./item/durability");
+Object.defineProperty(exports, "Durability", { enumerable: true, get: function () { return durability_1.Durability; } });
+var durabilitystateevents_1 = require("./item/durabilitystateevents");
+Object.defineProperty(exports, "DurabilityStateEvents", { enumerable: true, get: function () { return durabilitystateevents_1.DurabilityStateEvents; } });
 var effect_1 = require("./status/effect/effect");
 Object.defineProperty(exports, "Effect", { enumerable: true, get: function () { return effect_1.Effect; } });
 var effectmanager_1 = require("./status/effect/effectmanager");
-Object.defineProperty(exports, "EffectManager", { enumerable: true, get: function () { return effectmanager_1.EffectManager; } });
-Object.defineProperty(exports, "ModifiableEffectManager", { enumerable: true, get: function () { return effectmanager_1.ModifiableEffectManager; } });
-Object.defineProperty(exports, "ModifiableManagedEffect", { enumerable: true, get: function () { return effectmanager_1.ModifiableManagedEffect; } });
-Object.defineProperty(exports, "UnmodifiableEffectManager", { enumerable: true, get: function () { return effectmanager_1.UnmodifiableEffectManager; } });
+Object.defineProperty(exports, "EffectManager", { enumerable: true, get: function () { return effectmanager_1.EffectManager; } }); /*, ModifiableEffectManager, ModifiableManagedEffect, UnmodifiableEffectManager*/
 Object.defineProperty(exports, "ManagedEffect", { enumerable: true, get: function () { return effectmanager_1.ManagedEffect; } });
