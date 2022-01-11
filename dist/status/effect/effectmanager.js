@@ -13,25 +13,38 @@ class EffectManager extends tsee_1.EventEmitter {
             effects.forEach(effect => this.add(effect));
         }
     }
+    ;
     add(...effects) {
         arrayinput_1.ArrayInput.makeArray(effects).forEach((effect) => {
-            const managedEffect = new ManagedEffect(effect);
-            if (this.defaultCountUpdateEvent) {
-                managedEffect.on("countUpdate", this.defaultCountUpdateEvent);
+            if (this.effects.has(effect.name)) {
+                this.effects.get(effect.name).addOne();
             }
-            this.effects.set(effect.name, managedEffect);
-            this.emit('add', managedEffect);
+            else {
+                const managedEffect = new ManagedEffect(effect);
+                if (this.defaultCountUpdateEvent) {
+                    managedEffect.on("countUpdate", this.defaultCountUpdateEvent);
+                }
+                if (this.defaultDepletedEvent) {
+                    managedEffect.on("depleted", this.defaultDepletedEvent);
+                }
+                this.effects.set(effect.name, managedEffect);
+                this.emit('add', managedEffect);
+            }
         });
         return this;
     }
+    ;
     addMult(effects) {
         effects.forEach(effect => this.add(effect));
         return this;
     }
+    ;
     get(effectName) {
         return this.effects.get(effectName);
     }
+    ;
     remove(effectName) {
+        effectName = effectName instanceof ManagedEffect ? effectName.effect.name : typeof effectName === 'string' ? effectName : effectName.name;
         if (!this.effects.has(effectName)) {
             throw new util_1.ValueError(`EffectManagerValueError: "${effectName}" is not a valid effect name in this effect manager's managed effects.`);
         }
@@ -40,18 +53,37 @@ class EffectManager extends tsee_1.EventEmitter {
         this.emit('remove', toDelete);
         return this;
     }
+    ;
+    replace(effect) {
+        let tr = effect instanceof ManagedEffect ? effect : new ManagedEffect(effect);
+        if (!this.effects.has(tr.effect.name)) {
+            return this.add(tr.effect);
+        }
+        this.remove(tr);
+        this.add(tr.effect);
+        return this;
+    }
+    ;
     getEffects() {
         let nm = new Map();
         Array.from(this.effects.keys()).forEach(e => nm.set(e, this.effects.get(e)));
         return structuredClone(this.effects);
     }
+    ;
     setDefaultCountUpdateEvent(eventHandler) {
         this.defaultCountUpdateEvent = eventHandler;
         return this;
     }
+    ;
+    setDefaultDepletedEvent(eventHandler) {
+        this.defaultDepletedEvent = eventHandler;
+        return this;
+    }
+    ;
     get staticEffects() {
         return this.getEffects();
     }
+    ;
 }
 exports.EffectManager = EffectManager;
 class ManagedEffect extends tsee_1.EventEmitter {
@@ -82,15 +114,17 @@ class ManagedEffect extends tsee_1.EventEmitter {
         return this;
     }
     ;
-    removeOne(count) {
+    removeOne() {
         this.count -= 1;
         return this;
     }
     ;
-    removeAll(count) {
+    removeAll() {
         this.count = 0;
         return this;
     }
+    ;
+    deplete() { return this.removeAll(); }
     ;
     get count() {
         return this._count;

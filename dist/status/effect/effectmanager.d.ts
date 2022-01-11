@@ -2,14 +2,17 @@ import { EventEmitter } from 'tsee';
 import { Effect } from "./effect";
 export declare class EffectManager<EffectType extends Effect> extends EventEmitter<EffectManagerEvents<EffectType>> {
     defaultCountUpdateEvent: (effect: ManagedEffect<EffectType>) => void;
+    defaultDepletedEvent: (effect: ManagedEffect<EffectType>) => void;
     private effects;
     constructor(effects?: EffectType[]);
     add(...effects: EffectType[]): EffectManager<EffectType>;
     addMult(effects: EffectType[]): EffectManager<EffectType>;
     get(effectName: string): ManagedEffect<EffectType>;
-    remove(effectName: string): EffectManager<EffectType>;
+    remove(effectName: string | ManagedEffect<EffectType> | EffectType): EffectManager<EffectType>;
+    replace(effect: ManagedEffect<EffectType> | EffectType): EffectManager<EffectType>;
     getEffects(): Map<string, ManagedEffect<EffectType>>;
     setDefaultCountUpdateEvent(eventHandler: (effect: ManagedEffect<EffectType>) => void): EffectManager<EffectType>;
+    setDefaultDepletedEvent(eventHandler: (effect: ManagedEffect<EffectType>) => void): EffectManager<EffectType>;
     get staticEffects(): Map<string, ManagedEffect<EffectType>>;
 }
 export declare class ManagedEffect<EffectType extends Effect> extends EventEmitter<ManagedEffectEvents<EffectType>> {
@@ -20,8 +23,9 @@ export declare class ManagedEffect<EffectType extends Effect> extends EventEmitt
     add(count: number): ManagedEffect<EffectType>;
     addOne(): ManagedEffect<EffectType>;
     remove(count: number): ManagedEffect<EffectType>;
-    removeOne(count: number): ManagedEffect<EffectType>;
-    removeAll(count: number): ManagedEffect<EffectType>;
+    removeOne(): ManagedEffect<EffectType>;
+    removeAll(): ManagedEffect<EffectType>;
+    deplete(): ManagedEffect<EffectType>;
     get count(): number;
     set count(count: number);
 }

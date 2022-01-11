@@ -35,5 +35,5 @@ Object.defineProperty(exports, "DurabilityStateEvents", { enumerable: true, get:
 var effect_1 = require("./status/effect/effect");
 Object.defineProperty(exports, "Effect", { enumerable: true, get: function () { return effect_1.Effect; } });
 var effectmanager_1 = require("./status/effect/effectmanager");
-Object.defineProperty(exports, "EffectManager", { enumerable: true, get: function () { return effectmanager_1.EffectManager; } }); /*, ModifiableEffectManager, ModifiableManagedEffect, UnmodifiableEffectManager*/
+Object.defineProperty(exports, "EffectManager", { enumerable: true, get: function () { return effectmanager_1.EffectManager; } });
 Object.defineProperty(exports, "ManagedEffect", { enumerable: true, get: function () { return effectmanager_1.ManagedEffect; } });

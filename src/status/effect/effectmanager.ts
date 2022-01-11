@@ -9,6 +9,7 @@ const structuredClone = require('realistic-structured-clone');
 export class EffectManager<EffectType extends Effect> extends EventEmitter<EffectManagerEvents<EffectType>> {
 
     defaultCountUpdateEvent: (effect: ManagedEffect<EffectType>) => void;
+    defaultDepletedEvent: (effect: ManagedEffect<EffectType>) => void;
 
     private effects: Map<string, ManagedEffect<EffectType>> = new Map();
 
@@ -16,7 +17,7 @@ export class EffectManager<EffectType extends Effect> extends EventEmitter<Effec
     constructor(effects?: EffectType[]) {
         super();
         if (effects) {effects.forEach(effect => this.add(effect));}
-    }
+    };
 
 
 
@@ -27,21 +28,22 @@ export class EffectManager<EffectType extends Effect> extends EventEmitter<Effec
             } else {
                 const managedEffect = new ManagedEffect<EffectType>(effect);
                 if (this.defaultCountUpdateEvent) {managedEffect.on("countUpdate", this.defaultCountUpdateEvent);}
+                if (this.defaultDepletedEvent) {managedEffect.on("depleted", this.defaultDepletedEvent);}
                 this.effects.set(effect.name, managedEffect);
                 this.emit('add', managedEffect);
             }
         });
         return this;
-    }
+    };
 
     public addMult(effects: EffectType[]): EffectManager<EffectType> {
         effects.forEach(effect => this.add(effect));
         return this;
-    }
+    };
 
     public get(effectName: string): ManagedEffect<EffectType> {
         return this.effects.get(effectName);
-    }
+    };
 
     public remove(effectName: string | ManagedEffect<EffectType> | EffectType): EffectManager<EffectType> {
         effectName = effectName instanceof ManagedEffect ? effectName.effect.name : typeof effectName === 'string' ? effectName : effectName.name;
@@ -50,7 +52,7 @@ export class EffectManager<EffectType extends Effect> extends EventEmitter<Effec
         this.effects.delete(effectName);
         this.emit('remove', toDelete);
         return this;
-    }
+    };
 
     public replace(effect: ManagedEffect<EffectType> | EffectType): EffectManager<EffectType> {
         let tr = effect instanceof ManagedEffect ? effect : new ManagedEffect<EffectType>(effect);
@@ -58,23 +60,28 @@ export class EffectManager<EffectType extends Effect> extends EventEmitter<Effec
         this.remove(tr);
         this.add(tr.effect);
         return this;
-    }
+    };
 
     public getEffects(): Map<string, ManagedEffect<EffectType>> {
         let nm = new Map();
         Array.from(this.effects.keys()).forEach(e => nm.set(e, this.effects.get(e)));
         return structuredClone(this.effects);
-    }
+    };
 
     public setDefaultCountUpdateEvent(eventHandler: (effect: ManagedEffect<EffectType>) => void): EffectManager<EffectType> {
         this.defaultCountUpdateEvent = eventHandler;
         return this;
-    }
+    };
+
+    public setDefaultDepletedEvent (eventHandler: (effect: ManagedEffect<EffectType>) => void): EffectManager<EffectType> {
+        this.defaultDepletedEvent = eventHandler;
+        return this;
+    };
 
 
     get staticEffects(): Map<string, ManagedEffect<EffectType>> {
         return this.getEffects();
-    }
+    };
 
 }
 
@@ -114,15 +121,17 @@ export class ManagedEffect<EffectType extends Effect> extends EventEmitter<Manag
         return this;
     };
 
-    public removeOne(count: number): ManagedEffect<EffectType> {
+    public removeOne(): ManagedEffect<EffectType> {
         this.count -= 1;
         return this;
     };
 
-    public removeAll(count: number): ManagedEffect<EffectType> {
+    public removeAll(): ManagedEffect<EffectType> {
         this.count = 0;
         return this;
     };
+
+    public deplete(): ManagedEffect<EffectType> {return this.removeAll();};
 
 
     get count(): number {
