@@ -1,10 +1,23 @@
 export class Effect {
+    
+    displayName: string;
 
-    name: string;
+    private _id: string;
 
 
-    constructor(name: string) {
-        this.name = name;
+    constructor(id: string, displayName?: string) {
+        this._id = id;
+        this.displayName = displayName || id;
     }
+
+
+
+    public setDisplayName(name: string): Effect {
+        this.displayName = name;
+        return this;
+    };
+
+
+    get id(): string {return this._id;};
 
 }

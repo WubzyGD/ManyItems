@@ -1,10 +1,10 @@
 const mi = require('./dist/index');
 
 let em = new mi.EffectManager()
-    .setDefaultCountUpdateEvent(effect => console.log(`${effect.effect.name} now has ${effect.count} afflictions.`))
-    .setDefaultDepletedEvent(effect => console.log(`${effect.effect.name} is now depleted!`))
-    .on("add", effect => console.log(`${effect.effect.name} has been added to the plyer.`))
-    .add(new mi.Effect('Poisoned'))
-    .add(new mi.Effect('Poisoned'));
+    .setDefaultCountUpdateEvent(effect => console.log(`${effect.effect.displayName} now has ${effect.count} afflictions.`))
+    .setDefaultDepletedEvent(effect => console.log(`${effect.effect.displayName} is now depleted!`))
+    .on("add", effect => console.log(`${effect.effect.displayName} has been added to the plyer.`))
+    .add(new mi.Effect('poison', 'Poisoned'))
+    .add(new mi.Effect('poison', 'Poisoned'));
 
-em.get('Poisoned').deplete();
+em.get('poison').deplete().setCount(0);

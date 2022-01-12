@@ -16,8 +16,8 @@ class EffectManager extends tsee_1.EventEmitter {
     ;
     add(...effects) {
         arrayinput_1.ArrayInput.makeArray(effects).forEach((effect) => {
-            if (this.effects.has(effect.name)) {
-                this.effects.get(effect.name).addOne();
+            if (this.effects.has(effect.id)) {
+                this.effects.get(effect.id).addOne();
             }
             else {
                 const managedEffect = new ManagedEffect(effect);
@@ -27,7 +27,7 @@ class EffectManager extends tsee_1.EventEmitter {
                 if (this.defaultDepletedEvent) {
                     managedEffect.on("depleted", this.defaultDepletedEvent);
                 }
-                this.effects.set(effect.name, managedEffect);
+                this.effects.set(effect.id, managedEffect);
                 this.emit('add', managedEffect);
             }
         });
@@ -39,24 +39,24 @@ class EffectManager extends tsee_1.EventEmitter {
         return this;
     }
     ;
-    get(effectName) {
-        return this.effects.get(effectName);
+    get(effectid) {
+        return this.effects.get(effectid);
     }
     ;
-    remove(effectName) {
-        effectName = effectName instanceof ManagedEffect ? effectName.effect.name : typeof effectName === 'string' ? effectName : effectName.name;
-        if (!this.effects.has(effectName)) {
-            throw new util_1.ValueError(`EffectManagerValueError: "${effectName}" is not a valid effect name in this effect manager's managed effects.`);
+    remove(effectid) {
+        effectid = effectid instanceof ManagedEffect ? effectid.effect.id : typeof effectid === 'string' ? effectid : effectid.id;
+        if (!this.effects.has(effectid)) {
+            throw new util_1.ValueError(`EffectManagerValueError: "${effectid}" is not a valid effect id in this effect manager's managed effects.`);
         }
-        let toDelete = this.effects.get(effectName);
-        this.effects.delete(effectName);
+        let toDelete = this.effects.get(effectid);
+        this.effects.delete(effectid);
         this.emit('remove', toDelete);
         return this;
     }
     ;
     replace(effect) {
         let tr = effect instanceof ManagedEffect ? effect : new ManagedEffect(effect);
-        if (!this.effects.has(tr.effect.name)) {
+        if (!this.effects.has(tr.effect.id)) {
             return this.add(tr.effect);
         }
         this.remove(tr);
@@ -90,6 +90,7 @@ class ManagedEffect extends tsee_1.EventEmitter {
     constructor(effect, count) {
         super();
         this._count = 1;
+        this._depleted = false;
         this.effect = effect;
         this._count = count || this._count;
     }
@@ -135,8 +136,14 @@ class ManagedEffect extends tsee_1.EventEmitter {
         this.emit('countUpdate', this);
         if (this._count <= 0) {
             this._count = 0;
-            this.emit('depleted', this);
+            if (!this._depleted) {
+                this._depleted = true;
+                this.emit('depleted', this);
+            }
         }
+    }
+    get depleted() {
+        return this._depleted;
     }
 }
 exports.ManagedEffect = ManagedEffect;

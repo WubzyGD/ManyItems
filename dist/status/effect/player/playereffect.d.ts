@@ -15,10 +15,11 @@ export declare class PlayerEffect extends Effect {
     /**
      * An Effect applied to a Player instance.
      * This can be inflicted by a weapon or spell, given manually, or applied on a basis of race
-     * @param {string} name - The effect's name.
+     * @param {string} id - The effect's id.
+     * @param {string} displayName - A human-readable name for the effect.
      * @param {string[]} ignoreRaces - (Optional) - A list of races the effect can't be applied to.
      */
-    constructor(name: string, ignoreRaces?: string[]);
+    constructor(id: string, displayName?: string, ignoreRaces?: string[]);
     setHealth(healthEffect: HealthEffect): PlayerEffect;
     setMeta(meta: PlayerEffectMeta): PlayerEffect;
     applyTo(target: Player): PlayerEffect;

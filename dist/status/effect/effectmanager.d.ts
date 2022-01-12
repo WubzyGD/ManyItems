@@ -7,8 +7,8 @@ export declare class EffectManager<EffectType extends Effect> extends EventEmitt
     constructor(effects?: EffectType[]);
     add(...effects: EffectType[]): EffectManager<EffectType>;
     addMult(effects: EffectType[]): EffectManager<EffectType>;
-    get(effectName: string): ManagedEffect<EffectType>;
-    remove(effectName: string | ManagedEffect<EffectType> | EffectType): EffectManager<EffectType>;
+    get(effectid: string): ManagedEffect<EffectType>;
+    remove(effectid: string | ManagedEffect<EffectType> | EffectType): EffectManager<EffectType>;
     replace(effect: ManagedEffect<EffectType> | EffectType): EffectManager<EffectType>;
     getEffects(): Map<string, ManagedEffect<EffectType>>;
     setDefaultCountUpdateEvent(eventHandler: (effect: ManagedEffect<EffectType>) => void): EffectManager<EffectType>;
@@ -18,6 +18,7 @@ export declare class EffectManager<EffectType extends Effect> extends EventEmitt
 export declare class ManagedEffect<EffectType extends Effect> extends EventEmitter<ManagedEffectEvents<EffectType>> {
     effect: EffectType;
     private _count;
+    private _depleted;
     constructor(effect: EffectType, count?: number);
     setCount(count: number): ManagedEffect<EffectType>;
     add(count: number): ManagedEffect<EffectType>;
@@ -28,6 +29,7 @@ export declare class ManagedEffect<EffectType extends Effect> extends EventEmitt
     deplete(): ManagedEffect<EffectType>;
     get count(): number;
     set count(count: number);
+    get depleted(): boolean;
 }
 export declare type EffectManagerEvents<EffectType extends Effect> = {
     'add': (effect: ManagedEffect<EffectType>) => void;

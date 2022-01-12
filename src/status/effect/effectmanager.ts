@@ -23,13 +23,13 @@ export class EffectManager<EffectType extends Effect> extends EventEmitter<Effec
 
     public add(...effects: EffectType[]): EffectManager<EffectType> {
         ArrayInput.makeArray<EffectType>(effects).forEach((effect: EffectType) => {
-            if (this.effects.has(effect.name)) {
-                this.effects.get(effect.name).addOne();
+            if (this.effects.has(effect.id)) {
+                this.effects.get(effect.id).addOne();
             } else {
                 const managedEffect = new ManagedEffect<EffectType>(effect);
                 if (this.defaultCountUpdateEvent) {managedEffect.on("countUpdate", this.defaultCountUpdateEvent);}
                 if (this.defaultDepletedEvent) {managedEffect.on("depleted", this.defaultDepletedEvent);}
-                this.effects.set(effect.name, managedEffect);
+                this.effects.set(effect.id, managedEffect);
                 this.emit('add', managedEffect);
             }
         });
@@ -41,22 +41,22 @@ export class EffectManager<EffectType extends Effect> extends EventEmitter<Effec
         return this;
     };
 
-    public get(effectName: string): ManagedEffect<EffectType> {
-        return this.effects.get(effectName);
+    public get(effectid: string): ManagedEffect<EffectType> {
+        return this.effects.get(effectid);
     };
 
-    public remove(effectName: string | ManagedEffect<EffectType> | EffectType): EffectManager<EffectType> {
-        effectName = effectName instanceof ManagedEffect ? effectName.effect.name : typeof effectName === 'string' ? effectName : effectName.name;
-        if (!this.effects.has(effectName)) {throw new ValueError(`EffectManagerValueError: "${effectName}" is not a valid effect name in this effect manager's managed effects.`);}
-        let toDelete = this.effects.get(effectName);
-        this.effects.delete(effectName);
+    public remove(effectid: string | ManagedEffect<EffectType> | EffectType): EffectManager<EffectType> {
+        effectid = effectid instanceof ManagedEffect ? effectid.effect.id : typeof effectid === 'string' ? effectid : effectid.id;
+        if (!this.effects.has(effectid)) {throw new ValueError(`EffectManagerValueError: "${effectid}" is not a valid effect id in this effect manager's managed effects.`);}
+        let toDelete = this.effects.get(effectid);
+        this.effects.delete(effectid);
         this.emit('remove', toDelete);
         return this;
     };
 
     public replace(effect: ManagedEffect<EffectType> | EffectType): EffectManager<EffectType> {
         let tr = effect instanceof ManagedEffect ? effect : new ManagedEffect<EffectType>(effect);
-        if (!this.effects.has(tr.effect.name)) {return this.add(tr.effect);}
+        if (!this.effects.has(tr.effect.id)) {return this.add(tr.effect);}
         this.remove(tr);
         this.add(tr.effect);
         return this;
@@ -91,6 +91,7 @@ export class ManagedEffect<EffectType extends Effect> extends EventEmitter<Manag
     effect: EffectType;
 
     private _count: number = 1;
+    private _depleted: boolean = false;
 
 
     constructor(effect: EffectType, count?: number) {
@@ -143,8 +144,15 @@ export class ManagedEffect<EffectType extends Effect> extends EventEmitter<Manag
         this.emit('countUpdate', this);
         if (this._count <= 0) {
             this._count = 0;
-            this.emit('depleted', this);
+            if (!this._depleted) {
+                this._depleted = true;
+                this.emit('depleted', this);
+            }
         }
+    }
+
+    get depleted(): boolean {
+        return this._depleted;
     }
 
 }
