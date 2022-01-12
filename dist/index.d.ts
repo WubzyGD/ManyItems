@@ -16,3 +16,4 @@ export { DurabilityStateEvents } from './item/durabilitystateevents';
 export { Effect } from './status/effect/effect';
 export { EffectManager, ManagedEffect } from './status/effect/effectmanager';
 export { wait } from './util/wait';
+export { Status, PlayerStatus } from './status/status';

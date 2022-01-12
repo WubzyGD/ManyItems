@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.wait = exports.ManagedEffect = exports.EffectManager = exports.Effect = exports.DurabilityStateEvents = exports.Durability = exports.Item = exports.Weapon = exports.Random = exports.Die = exports.Dice = exports.PlayerEffect = exports.HealthEffect = exports.Lattice = exports.HealthManager = exports.Race = exports.Damage = exports.Attack = exports.Player = exports.Char = void 0;
+exports.PlayerStatus = exports.Status = exports.wait = exports.ManagedEffect = exports.EffectManager = exports.Effect = exports.DurabilityStateEvents = exports.Durability = exports.Item = exports.Weapon = exports.Random = exports.Die = exports.Dice = exports.PlayerEffect = exports.HealthEffect = exports.Lattice = exports.HealthManager = exports.Race = exports.Damage = exports.Attack = exports.Player = exports.Char = void 0;
 var char_1 = require("./char/char");
 Object.defineProperty(exports, "Char", { enumerable: true, get: function () { return char_1.Char; } });
 var player_1 = require("./char/player");
@@ -39,3 +39,6 @@ Object.defineProperty(exports, "EffectManager", { enumerable: true, get: functio
 Object.defineProperty(exports, "ManagedEffect", { enumerable: true, get: function () { return effectmanager_1.ManagedEffect; } });
 var wait_1 = require("./util/wait");
 Object.defineProperty(exports, "wait", { enumerable: true, get: function () { return wait_1.wait; } });
+var status_1 = require("./status/status");
+Object.defineProperty(exports, "Status", { enumerable: true, get: function () { return status_1.Status; } });
+Object.defineProperty(exports, "PlayerStatus", { enumerable: true, get: function () { return status_1.PlayerStatus; } });
