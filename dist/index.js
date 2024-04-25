@@ -1,44 +1,22 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PlayerStatus = exports.Status = exports.wait = exports.ManagedEffect = exports.EffectManager = exports.Effect = exports.DurabilityStateEvents = exports.Durability = exports.Item = exports.Weapon = exports.Random = exports.Die = exports.Dice = exports.PlayerEffect = exports.HealthEffect = exports.Lattice = exports.HealthManager = exports.Race = exports.Damage = exports.Attack = exports.Player = exports.Char = void 0;
-var char_1 = require("./char/char");
-Object.defineProperty(exports, "Char", { enumerable: true, get: function () { return char_1.Char; } });
-var player_1 = require("./char/player");
-Object.defineProperty(exports, "Player", { enumerable: true, get: function () { return player_1.Player; } });
-var attack_1 = require("./attack/attack");
-Object.defineProperty(exports, "Attack", { enumerable: true, get: function () { return attack_1.Attack; } });
-var damage_1 = require("./attack/damage");
-Object.defineProperty(exports, "Damage", { enumerable: true, get: function () { return damage_1.Damage; } });
-var race_1 = require("./char/modifiers/race");
-Object.defineProperty(exports, "Race", { enumerable: true, get: function () { return race_1.Race; } });
-var healthmanager_1 = require("./char/health/healthmanager");
-Object.defineProperty(exports, "HealthManager", { enumerable: true, get: function () { return healthmanager_1.HealthManager; } });
-var lattice_1 = require("./char/health/lattice");
-Object.defineProperty(exports, "Lattice", { enumerable: true, get: function () { return lattice_1.Lattice; } });
-var healtheffect_1 = require("./status/effect/player/healtheffect");
-Object.defineProperty(exports, "HealthEffect", { enumerable: true, get: function () { return healtheffect_1.HealthEffect; } });
-var playereffect_1 = require("./status/effect/player/playereffect");
-Object.defineProperty(exports, "PlayerEffect", { enumerable: true, get: function () { return playereffect_1.PlayerEffect; } });
-var dice_1 = require("./util/dice");
-Object.defineProperty(exports, "Dice", { enumerable: true, get: function () { return dice_1.Dice; } });
-Object.defineProperty(exports, "Die", { enumerable: true, get: function () { return dice_1.Die; } });
-var random_1 = require("./util/random");
-Object.defineProperty(exports, "Random", { enumerable: true, get: function () { return random_1.Random; } });
-var weapon_1 = require("./item/weapon/weapon");
-Object.defineProperty(exports, "Weapon", { enumerable: true, get: function () { return weapon_1.Weapon; } });
-var item_1 = require("./item/item");
-Object.defineProperty(exports, "Item", { enumerable: true, get: function () { return item_1.Item; } });
-var durability_1 = require("./item/durability");
-Object.defineProperty(exports, "Durability", { enumerable: true, get: function () { return durability_1.Durability; } });
-var durabilitystateevents_1 = require("./item/durabilitystateevents");
-Object.defineProperty(exports, "DurabilityStateEvents", { enumerable: true, get: function () { return durabilitystateevents_1.DurabilityStateEvents; } });
-var effect_1 = require("./status/effect/effect");
-Object.defineProperty(exports, "Effect", { enumerable: true, get: function () { return effect_1.Effect; } });
-var effectmanager_1 = require("./status/effect/effectmanager");
-Object.defineProperty(exports, "EffectManager", { enumerable: true, get: function () { return effectmanager_1.EffectManager; } });
-Object.defineProperty(exports, "ManagedEffect", { enumerable: true, get: function () { return effectmanager_1.ManagedEffect; } });
-var wait_1 = require("./util/wait");
-Object.defineProperty(exports, "wait", { enumerable: true, get: function () { return wait_1.wait; } });
-var status_1 = require("./status/status");
-Object.defineProperty(exports, "Status", { enumerable: true, get: function () { return status_1.Status; } });
-Object.defineProperty(exports, "PlayerStatus", { enumerable: true, get: function () { return status_1.PlayerStatus; } });
+exports.errors = exports.features = void 0;
+const ifeatures = require("./features/exports");
+exports.features = { ...ifeatures };
+const ierrors = require("./errors");
+exports.errors = { ...ierrors };
+__exportStar(require("./basicitem"), exports);

@@ -1,19 +1,29 @@
-export { Char } from "./char/char";
-export { Player } from './char/player';
-export { Attack } from './attack/attack';
-export { Damage } from './attack/damage';
-export { Race } from './char/modifiers/race';
-export { HealthManager } from './char/health/healthmanager';
-export { Lattice } from './char/health/lattice';
-export { HealthEffect } from './status/effect/player/healtheffect';
-export { PlayerEffect } from './status/effect/player/playereffect';
-export { Dice, Die } from './util/dice';
-export { Random } from './util/random';
-export { Weapon } from './item/weapon/weapon';
-export { Item } from './item/item';
-export { Durability } from './item/durability';
-export { DurabilityStateEvents } from './item/durabilitystateevents';
-export { Effect } from './status/effect/effect';
-export { EffectManager, ManagedEffect } from './status/effect/effectmanager';
-export { wait } from './util/wait';
-export { Status, PlayerStatus } from './status/status';
+import * as ifeatures from './features/exports';
+export declare const features: {
+    Feature: typeof ifeatures.Feature;
+    XP: typeof ifeatures.XP;
+};
+export declare const errors: {
+    ErrorBuilder: (name: any) => {
+        new (message?: string): {
+            name: string;
+            message: string;
+            stack?: string;
+        };
+    };
+    XPAssignmentError: {
+        new (message?: string): {
+            name: string;
+            message: string;
+            stack?: string;
+        };
+    };
+    LevelAssignmentError: {
+        new (message?: string): {
+            name: string;
+            message: string;
+            stack?: string;
+        };
+    };
+};
+export * from './basicitem';

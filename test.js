@@ -1,14 +1,14 @@
-const mi = require('./dist/index');
+const ManyItems = require('./dist/index');
 
-/*let em = new mi.EffectManager()
-    .setDefaultCountUpdateEvent(effect => console.log(`${effect.effect.displayName} now has ${effect.count} afflictions.`))
-    .setDefaultDepletedEvent(effect => console.log(`${effect.effect.displayName} is now depleted!`))
-    .on("add", effect => console.log(`${effect.effect.displayName} has been added to the plyer.`))
-    .add(new mi.Effect('poison', 'Poisoned'))
-    .add(new mi.Effect('poison', 'Poisoned'));
+const player = new ManyItems.BasicItem('Player', 'player')
+    .addFeature(new ManyItems.features.XP()
+        .setHook((f, i) => console.log(`${f.name} is being applied to ${i.name}!`))
+        .setGainHook((amt, xp) => console.log(`${player.name}'s new XP amount is ${amt}, from ${xp.xp} - ^${amt - xp.xp} - [${xp.xp}/${xp.currentLevelMax}]`))
+        .setLevelCheck(xp => xp.xp >= xp.currentLevelMax)
+        .setLevelHook((tl, xp) => console.log(`${player.name}'s new level is ${xp.level}!`))
+    );
+console.log(player.xp);
 
-em.get('poison').deplete().setCount(0);*/
+//for (i=1;i<21;i++) {console.log(i, player.xp.levelAlgorithm(i));}
 
-const vincent = new mi.Player('Vincent', 100, {race: 'Demon'});
-const exhausted = new mi.PlayerStatus('exh', 'Exhausted', (status, char) => {console.log(`${char.name} is now ${status.displayName}.`);});
-exhausted.applyTo(vincent);
+for (i=1;i<21;i++) {player.xp.xp += 10;}
